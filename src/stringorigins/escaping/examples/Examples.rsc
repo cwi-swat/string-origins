@@ -4,8 +4,15 @@ import lang::missgrant::base::Implode;
 import lang::missgrant::base::Compile;
 import stringorigins::escaping::Protect;
 import IO;
+import ValueIO;
 import String;
 import stringorigins::escaping::ProtectedTransformer;
+import util::IDE;
+import lang::java::\syntax::Java15;
+import ParseTree;
+import util::Maybe;
+
+anno lrel[Maybe[loc],str] Tree@origins;
 
 void example1(){
 	s1 = "Pablo";
@@ -33,4 +40,17 @@ void example2(){
 	originalOutputOrigins = origins(originalOutputStr);
 	r = ptransform(T, alteredSm, alteredOutput, originalOutputOrigins);
 	writeFile(alteredOutputCorrected, r);
+}
+
+void example3(){
+	loc originalSm = |project://string-origins/src/input/missgrantprotected.ctl|;
+	loc originalOutput = |project://string-origins/src/input/missgrantprotected.javax|;
+ 	loc originalOutputOriginsLoc = |project://string-origins/src/input/missgrantprotected.origins|;
+ 	T = str(loc l){ return compile("example", load(l)); };
+ 	
+ 	str originalOutputStr = T(originalSm);
+	writeFile(originalOutput, originalOutputStr);
+ 	originalOutputOrigins = origins(originalOutputStr);
+ 	writeBinaryValueFile(originalOutputOriginsLoc, originalOutputOrigins);
+ 	
 }
