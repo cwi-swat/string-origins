@@ -20,6 +20,7 @@ import ParseTree;
 import List;
 import String;
 import IO;
+import ValueIO;
 
 private str CONTROLLER_LANG = "Controller";
 private str CONTROLLER_EXT = "ctl";
@@ -62,7 +63,10 @@ void main() {
     		   ctl = desugar([resetEvents(), retries()], implode(pt));
     		   out = (pt@\loc)[extension="java"];
     		   class = split(".", out.file)[0];
-    		   writeFile(out, compile(class, ctl));
+    		   generated = compile(class, ctl);
+    		   writeFile(out, generated);
+    		   writeFile((pt@\loc)[extension="string"], generated);
+    		   writeBinaryValueFile((pt@\loc)[extension="origins"], origins(generated));
                return {};
     		 }),
     		 

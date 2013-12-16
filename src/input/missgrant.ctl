@@ -13,6 +13,7 @@ resetEvents
  doorOpened
 end 
 
+
 commands
  unlockPanel PNUL
  lockPanel PNLK
