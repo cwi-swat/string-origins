@@ -7,7 +7,6 @@ import vis::Figure;
 import List;
 import util::Math;
 import IO;
-import util::Resources;
 import vis::Render;
 import Relation;
 import Set;
@@ -21,7 +20,7 @@ Figure stateMachineGraph(TransRel trans, str init, str state) {
 	  str getColor(str s) = (s == state) ? "red" : ((s == init) ? "green" : "lightskyblue");
 
 	  list[Figure] nodes = [ box(text(i), left(), top(), fillColor(getColor(i)), grow(1.2), id(i))  
-	                         | i <-[init] + toList(domain(trans)) - init ] 
+	                         | i <-[init] + toList(trans<0> + trans<2>) - init ] 
 	       + [ ellipse(text(labelS), grow(1.1), left(), top(), id("<fromS>,<labelS>,<toS>"))  
 	           | <fromS,labelS,toS> <- trans ];
 
