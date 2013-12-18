@@ -8,10 +8,12 @@ import lang::java::\syntax::Java15;
 import ParseTree;
 import util::Maybe;
 
-anno lrel[Maybe[loc],str] Tree@origins;
+str JAVA_LANG = "Javax";
+str JAVA_EXT = "javax";
 
 public void setupIDEForJavax() {
-   registerLanguage("Javax", "javax", Tree(str src, loc l) {
+
+   registerLanguage(JAVA_LANG, JAVA_EXT, Tree(str src, loc l) {
    	loc originsLoc = l;
    	originsLoc.extension = "origins";
     if (exists(originsLoc)){
