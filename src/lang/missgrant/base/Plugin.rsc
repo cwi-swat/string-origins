@@ -71,7 +71,7 @@ void main() {
     		   	 generated = plugRegions(readBinaryValueFile(#list[tuple[int, int, str, str]], regions), origins(generated));
     		   }
     		   theOrigins = origins(generated);
-    		   writeBinaryValueFile(regions, calculateRegions(theOrigins));
+    		   writeTextValueFile(regions, calculateRegions(theOrigins));
     		   writeFile(out, generated);
     		   writeFile((pt@\loc)[extension="string"], generated);
     		   writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);

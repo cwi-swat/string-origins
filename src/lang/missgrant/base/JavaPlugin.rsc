@@ -34,7 +34,7 @@ void javaMain() {
      }
    	 if (exists(regionsLoc)){
    	 	try{
-    		theRegions = readBinaryValueFile(#list[tuple[int,int,str,str]], regionsLoc);
+    		theRegions = readTextValueFile(#list[tuple[int,int,str,str]], regionsLoc);
     	} catch e:{
     		println(e);
     	};
