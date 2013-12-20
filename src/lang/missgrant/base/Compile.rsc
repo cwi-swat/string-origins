@@ -31,6 +31,7 @@ str command2java(Command command) =
          "private void <command.name>(java.io.Writer output) throws java.io.IOException {
          '  output.write(\"<command.token>\\n\");
          '  output.flush();
+         '  <protected("// Add more code here", command.name)>
          '}";
 
 str event2java(Event event) =
@@ -62,7 +63,6 @@ str state2case(State s) =
          '     state = <stateName(s2)>;
          '  }
          '  <}>
-         '  <protected("/* Add here your specific logic for the state */", stateName(s))>
          '  break;
          '}";
 

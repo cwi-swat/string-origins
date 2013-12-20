@@ -41,7 +41,7 @@ str plugRegions(list[Region] regions, lrel[Maybe[loc],str] generatedOrigins){
 				if (isInQueryStr(l, "protected")){
 					v = getParameterValue(l, "protected");
 					if (v in extractedBlocks)
-						newstr += extractedBlocks[v];
+						newstr += protected(setOrigins(extractedBlocks[v], [l]), v);
 					else
 						newstr += chunk;
 				}else{

@@ -3,34 +3,37 @@
 events
  doorClosed D1CL
  drawerOpened D2OP
- 
  lightOn L1ON
  doorOpened D1OP
- panelClosed PNCL 
+ panelClosed PNCL
 end 
+
 
 resetEvents 
  doorOpened
 end 
 
-
 commands
  unlockPanel PNUL
- lockPanel PNLK
+ lockpanel PNLK
  lockDoor D1LK
+ 
  unlockDoor D1UL
 end
   
 state idle
- actions {unlockDoor lockPanel}
+ actions {unlockDoor lockpanel}
  doorClosed => active 
  after 4 lockPanel => lockedOut  
 end
-  
+
+
 state active
  drawerOpened => waitingForLight
  lightOn => waitingForDrawer 
 end 
+
+
 
 
 state waitingForLight 
