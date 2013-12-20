@@ -22,6 +22,8 @@ import String;
 import IO;
 import ValueIO;
 
+import stringorigins::escaping::Protect;
+
 private str CONTROLLER_LANG = "Controller";
 private str CONTROLLER_EXT = "ctl";
 
@@ -61,12 +63,18 @@ void main() {
 
     		 builder(set[Message] (Tree pt) {
     		   ctl = desugar([resetEvents(), retries()], implode(pt));
-    		   out = (pt@\loc)[extension="java"];
+    		   out = (pt@\loc)[extension="javax"];
+    		   regions = (pt@\loc)[extension="regions"];
     		   class = split(".", out.file)[0];
     		   generated = compile(class, ctl);
+    		   if (exists(regions)){
+    		   	 generated = plugRegions(readBinaryValueFile(#list[tuple[int, int, str, str]], regions), origins(generated));
+    		   }
+    		   theOrigins = origins(generated);
+    		   writeBinaryValueFile(regions, calculateRegions(theOrigins));
     		   writeFile(out, generated);
     		   writeFile((pt@\loc)[extension="string"], generated);
-    		   writeBinaryValueFile((pt@\loc)[extension="origins"], origins(generated));
+    		   writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
                return {};
     		 }),
     		 

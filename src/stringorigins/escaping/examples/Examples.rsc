@@ -43,9 +43,9 @@ void example2(){
 }
 
 void example3(){
-	loc originalSm = |project://string-origins/src/input/missgrantprotected.ctl|;
-	loc originalOutput = |project://string-origins/src/input/missgrantprotected.javax|;
- 	loc originalOutputOriginsLoc = |project://string-origins/src/input/missgrantprotected.origins|;
+	loc originalSm = |project://string-origins/src/input/simple.ctl|;
+	loc originalOutput = |project://string-origins/src/input/simple.javax|;
+ 	loc originalOutputOriginsLoc = |project://string-origins/src/input/simple.origins|;
  	T = str(loc l){ return compile("example", load(l)); };
  	
  	str originalOutputStr = T(originalSm);
