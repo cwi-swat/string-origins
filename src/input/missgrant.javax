@@ -41,7 +41,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -60,7 +59,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -75,7 +73,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -90,7 +87,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -109,7 +105,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -120,7 +115,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -128,7 +122,7 @@ public class missgrant {
           
              unlockDoor(output);
           
-             lockPanel(output);
+             LOCKPANEL(output);
           
           
           if (doorClosed(token)) {
@@ -147,7 +141,6 @@ public class missgrant {
              state = state$idleR;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -155,7 +148,7 @@ public class missgrant {
           
              unlockDoor(output);
           
-             lockPanel(output);
+             LOCKPANEL(output);
           
           
           if (doorClosed(token)) {
@@ -174,7 +167,6 @@ public class missgrant {
              state = state$idleRR;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -182,7 +174,7 @@ public class missgrant {
           
              unlockDoor(output);
           
-             lockPanel(output);
+             LOCKPANEL(output);
           
           
           if (doorClosed(token)) {
@@ -201,7 +193,6 @@ public class missgrant {
              state = state$lockedOut;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -209,7 +200,7 @@ public class missgrant {
           
              unlockDoor(output);
           
-             lockPanel(output);
+             LOCKPANEL(output);
           
           
           if (doorClosed(token)) {
@@ -228,7 +219,6 @@ public class missgrant {
              state = state$idleRRR;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -260,21 +250,25 @@ public class missgrant {
   private void unlockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNUL\n");
     output.flush();
+    // Add more YES and YES code here
   }
   
-  private void lockPanel(java.io.Writer output) throws java.io.IOException {
+  private void LOCKPANEL(java.io.Writer output) throws java.io.IOException {
     output.write("PNLK\n");
     output.flush();
+    // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1LK\n");
     output.flush();
+    // 
   }
   
   private void unlockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1UL\n");
     output.flush();
+    // Addsdjkfhfsdjkfhksdjhjksfdhkjhsfdk more code here
   }
   
 }

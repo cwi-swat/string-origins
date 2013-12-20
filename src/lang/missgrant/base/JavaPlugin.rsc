@@ -25,32 +25,18 @@ void javaMain() {
      pt = parse(#start[CompilationUnit], src, l);
      lrel[Maybe[loc],str] theOrigins = [];
      list[Region] theRegions = [];
-   	 if (exists(originsLoc)){
-    	try{
-    		theOrigins = readBinaryValueFile(#lrel[Maybe[loc],str], originsLoc);	
-    	} catch e:{
-    		println(e);
-    	};
-     }
    	 if (exists(regionsLoc)){
-   	 	try{
-    		theRegions = readTextValueFile(#list[tuple[int,int,str,str]], regionsLoc);
-    	} catch e:{
-    		println(e);
-    	};
+   	 	theRegions = readTextValueFile(#lrel[int,int,str,str], regionsLoc);
    	 }
-   	if (List::size(theOrigins)>0)
-   	 	pt = pt[@origins = theOrigins];
-   	if (List::size(theRegions)>0)
-   	 	pt = pt[@regions = theRegions];
-   	return pt; 	
+   	 pt = pt[@regions = theRegions];
+   	 return pt; 	
   });
 
   contribs = {
 		     builder(set[Message] (Tree pt) {
 		       regionsLoc = (pt@\loc)[extension="regions"];
     		   regions = pt@regions;
-    		   writeFile(regionsLoc, regions);
+    		   writeTextValueFile(regionsLoc, regions);
     		   return {};
     		 })
   };

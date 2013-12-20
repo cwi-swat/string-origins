@@ -68,13 +68,18 @@ void main() {
     		   class = split(".", out.file)[0];
     		   generated = compile(class, ctl);
     		   if (exists(regions)){
-    		   	 generated = plugRegions(readBinaryValueFile(#list[tuple[int, int, str, str]], regions), origins(generated));
+    		     println("regions: ");
+    		     theRegions = readTextValueFile(#lrel[int, int, str, str], regions);
+    		   	 iprintln(theRegions);
+    		     generated = plugRegions(theRegions, origins(generated));
     		   }
-    		   theOrigins = origins(generated);
-    		   writeTextValueFile(regions, calculateRegions(theOrigins));
+    		   theOrigins = origins(generated); // NB: origins after plugging
+    		   println("Origins: ");
+    		   iprintln(theOrigins);
+    		   newRegions = calculateRegions(theOrigins);
+    		   iprintln(newRegions);
+    		   writeTextValueFile(regions, newRegions);
     		   writeFile(out, generated);
-    		   writeFile((pt@\loc)[extension="string"], generated);
-    		   writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
                return {};
     		 }),
     		 
