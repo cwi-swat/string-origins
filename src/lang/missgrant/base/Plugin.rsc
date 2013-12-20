@@ -80,6 +80,8 @@ void main() {
     		   iprintln(newRegions);
     		   writeTextValueFile(regions, newRegions);
     		   writeFile(out, generated);
+    		   writeFile((pt@\loc)[extension="string"], generated);
+    		   writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
                return {};
     		 }),
     		 
