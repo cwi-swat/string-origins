@@ -7,7 +7,8 @@ import cobra::util;
 import String;
 import IO;
 import List;
-
+import ValueIO;
+import util::Math;
 
 tuple[&T, list[&T]] pick(list[&T] ss) {
   i = 0;
@@ -16,7 +17,12 @@ tuple[&T, list[&T]] pick(list[&T] ss) {
   }
   x = ss[i];
   if (size(ss) > 1) {
-    ss = ss[0..i] + ss[i+1..size(ss)];
+    new = delete(ss, i); //ss[0..i] + ss[i+1..size(ss)];
+    if (size(new) == size(ss)) {
+      println("ss= <ss>");
+      throw "Error: not deleted";
+    }
+    ss = new;
   }
   else {
     ss = [];
@@ -65,14 +71,44 @@ int benchmarkConcat(int count, int maxSize) {
   return n;
 }
 
+loc withOrgsFile = |project://string-origins/src/stringorigins/benchmark/concatWithOrgs.value|;
+loc withoutOrgsFile = |project://string-origins/src/stringorigins/benchmark/concatWithoutOrgs.value|;
+
 void benchmarkConcats() {
   results = [];
-  for (i <- [1,100..1000], j <- [1,10..100]) {
-    results += [<i, j, benchmarkConcat(i, j)>];
+  for (i <- [1,100..1000]) {
+    println("i = <i>");
+    results += [<i, 1000, benchmarkConcat(i, 1000)>];
+  }
+  if (originsAreEnabled()) {
+    println("Orgs are enabled");
+    writeTextValueFile(withOrgsFile, results);
+  }
+  else {
+    println("Orgs are not enabled");
+    writeTextValueFile(withoutOrgsFile, results);
   }
   iprintln(results);
 }
 
+
+void compareConcatBenchmarks() {
+ orgs = readTextValueFile(#list[tuple[int,int,int]], withOrgsFile);
+ noOrgs = readTextValueFile(#list[tuple[int,int,int]], withoutOrgsFile);
+ total = 0.0;
+ count = 0.0;
+ for (i <- [0..size(orgs)]) {
+   if (noOrgs[i][2] > 0) {
+     a = orgs[i][2];
+     b = noOrgs[i][2];
+     perc = (toReal(a) / toReal(b)) * 100;
+     println("factor (org/noOrgs): <a> / <b> = <perc>%");
+     total += perc;
+     count += 1;
+   }
+ }
+ println("Avg: <total / count>");
+}
 
 /*
 
