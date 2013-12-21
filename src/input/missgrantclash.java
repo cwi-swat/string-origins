@@ -98,7 +98,7 @@ public class missgrantclash {
     return token.equals("L1ON");
   }
   
-  private boolean doorOpened(String token) {
+  private boolean while$(String token) {
     return token.equals("D1OP");
   }
   

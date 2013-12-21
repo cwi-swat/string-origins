@@ -4,13 +4,13 @@ events
  run_ D1CL
  token D2OP
  run L1ON
- doorOpened D1OP
+ while D1OP
  panelClosed PNCL
 end 
 
 
 resetEvents 
- doorOpened
+ while
 end 
 
 commands
