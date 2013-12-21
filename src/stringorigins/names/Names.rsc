@@ -9,9 +9,47 @@ import IO;
 import List;
 
 loc missgrant = |project://string-origins/src/input/missgrantclash.ctl|;
+str missgrantClass = "missgrantclash";
 loc missgrantJava = |project://string-origins/src/input/missgrantclash.java|;
 
 rel[str, loc] physicalNames(M3 m) = m@names o (m@uses<1,0> + m@declarations);
+
+str missgrantJavaNames() {
+   ctl = load(missgrant);
+   src = compile(missgrantClass, ctl);
+   src = fixJavaNameClashes(src, missgrant, missgrantJava);
+   writeFile(missgrantJava, src);
+   return src;
+}
+
+str fixJavaNameClashes(str src, loc input, loc output) {
+   writeFile(output, src);
+   M3 m3 = createM3FromFile(output);
+   names = physicalNames(m3);
+   return fixNameClashes(src, input, output, names);
+}
+
+str fixNameClashes(str src, loc input, loc output, rel[str, loc] names) {
+   orgs = origins(src);
+   recon = reconstruct(orgs, output);
+   srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- recon, 
+                    org.path == input.path };
+   otherNames = names - srcNames;
+   overlap = srcNames<0> & otherNames<0>; 
+   if (overlap != {}) {
+     allNames = names<0>;
+     for (str x <- overlap) {
+       newName = fresh(x, allNames);
+       allNames += {newName};
+       println("Renaming <x> to <newName>");
+       for (<x, l> <- srcNames, <x, l, org> <- recon) {
+         orgs = rename(orgs, org, newName);
+       }  
+     }
+   }
+   return ( "" | it + x | <_, str x> <- orgs );
+}
+
 
 str fresh(str x, set[str] names) {
   while (x in names) {
@@ -20,35 +58,6 @@ str fresh(str x, set[str] names) {
   return x;
 }
 
-str missgrantJavaNames() {
-   ctl = load(missgrant);
-   src = compile("missgrantclash", ctl);
-   writeFile(missgrantJava, src);
-   orgs = origins(src);
-   recon = reconstruct(orgs, missgrantJava);
-   M3 m3 = createM3FromFile(missgrantJava);
-   names = physicalNames(m3);
-   srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- recon, 
-                    org.path == missgrant.path };
-   otherNames = names - srcNames;
-   iprintln(srcNames);
-   overlap = srcNames<0> & otherNames<0>; 
-   if (overlap != {}) {
-     println("Nameclash:");
-     iprintln(overlap);
-     allNames = names<0>;
-     for (str x <- overlap) {
-       newName = fresh(x, allNames);
-       allNames += {newName};
-       println("Renaming <x> to <newName>");
-       for (<x, l> <- srcNames, <x, l, org> <- recon) {
-         println("Renaming occurrence <l>");
-         orgs = rename(orgs, org, newName);
-       }  
-     }
-   }
-   return ( "" | it + x | <_, str x> <- orgs );
-}
 
 lrel[Maybe[loc], str] rename(lrel[Maybe[loc], str] src, loc l, str new) {
   return for (<org, str n> <- src) {
