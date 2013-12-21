@@ -40,6 +40,7 @@ state waitingForLight
  lightOn => unlockedPanel 
 end  
 
+
 state waitingForDrawer
  drawerOpened => unlockedPanel
 end 
