@@ -1,6 +1,6 @@
-public class missgrantprotected {
+public class missgrantclash {
   public static void main(String args[]) throws java.io.IOException { 
-     new missgrantprotected().run(new java.util.Scanner(System.in), 
+     new missgrantclash().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
   }
   
@@ -13,8 +13,6 @@ public class missgrantprotected {
   private static final int state$waitingForDrawer = 3;
   
   private static final int state$unlockedPanel = 4;
-  
-  private static final int state$lockedOut = 5;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
     int state = state$idle;
@@ -29,48 +27,44 @@ public class missgrantprotected {
              lockPanel(output);
           
           
-          if (doorClosed(token)) {
+          if (run_(token)) {
              state = state$active;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
         case state$active: {
           
           
-          if (drawerOpened(token)) {
+          if (token(token)) {
              state = state$waitingForLight;
           }
           
-          if (lightOn(token)) {
+          if (run(token)) {
              state = state$waitingForDrawer;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
         case state$waitingForLight: {
           
           
-          if (lightOn(token)) {
+          if (run(token)) {
              state = state$unlockedPanel;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
         case state$waitingForDrawer: {
           
           
-          if (drawerOpened(token)) {
+          if (token(token)) {
              state = state$unlockedPanel;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -85,14 +79,6 @@ public class missgrantprotected {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$lockedOut: {
-          
-          
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -100,15 +86,15 @@ public class missgrantprotected {
     }
   }
   
-  private boolean doorClosed(String token) {
+  private boolean run_(String token) {
     return token.equals("D1CL");
   }
   
-  private boolean drawerOpened(String token) {
+  private boolean token(String token) {
     return token.equals("D2OP");
   }
   
-  private boolean lightOn(String token) {
+  private boolean run(String token) {
     return token.equals("L1ON");
   }
   
@@ -124,21 +110,25 @@ public class missgrantprotected {
   private void unlockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNUL\n");
     output.flush();
+    // Add more code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNLK\n");
     output.flush();
+    // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1LK\n");
     output.flush();
+    // Add more code here
   }
   
   private void unlockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1UL\n");
     output.flush();
+    // Add more code here
   }
   
 }

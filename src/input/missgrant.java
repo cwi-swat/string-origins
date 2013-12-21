@@ -4,29 +4,39 @@ public class missgrant {
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int state$active = 0;
+  private static final int state$idle = 0;
   
-  private static final int state$waitingForLight = 1;
+  private static final int state$active = 1;
   
-  private static final int state$waitingForDrawer = 2;
+  private static final int state$waitingForLight = 2;
   
-  private static final int state$unlockedPanel = 3;
+  private static final int state$waitingForDrawer = 3;
   
-  private static final int state$lockedOut = 4;
-  
-  private static final int state$idle = 5;
-  
-  private static final int state$idleR = 6;
-  
-  private static final int state$idleRRR = 7;
-  
-  private static final int state$idleRR = 8;
+  private static final int state$unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = state$active;
+    int state = state$idle;
     while (true) {
       String token = input.nextLine();
       switch (state) {
+        
+        case state$idle: {
+          
+             unlockDoor(output);
+          
+             lockPanel(output);
+          
+          
+          if (doorClosed(token)) {
+             state = state$active;
+          }
+          
+          if (doorOpened(token)) {
+             state = state$idle;
+          }
+          
+          break;
+        }
         
         case state$active: {
           
@@ -43,7 +53,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -58,7 +67,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -73,7 +81,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -92,110 +99,6 @@ public class missgrant {
              state = state$idle;
           }
           
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$lockedOut: {
-          
-          
-          if (doorOpened(token)) {
-             state = state$idle;
-          }
-          
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$idle: {
-          
-             unlockDoor(output);
-          
-             lockPanel(output);
-          
-          
-          if (doorClosed(token)) {
-             state = state$active;
-          }
-          
-          if (doorOpened(token)) {
-             state = state$idle;
-          }
-          
-          if (lockPanel(token)) {
-             state = state$idleR;
-          }
-          
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$idleR: {
-          
-             unlockDoor(output);
-          
-             lockPanel(output);
-          
-          
-          if (doorClosed(token)) {
-             state = state$active;
-          }
-          
-          if (doorOpened(token)) {
-             state = state$idle;
-          }
-          
-          if (lockPanel(token)) {
-             state = state$idleRR;
-          }
-          
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$idleRRR: {
-          
-             unlockDoor(output);
-          
-             lockPanel(output);
-          
-          
-          if (doorClosed(token)) {
-             state = state$active;
-          }
-          
-          if (doorOpened(token)) {
-             state = state$idle;
-          }
-          
-          if (lockPanel(token)) {
-             state = state$lockedOut;
-          }
-          
-          /* Add here your specific logic for the state */
-          break;
-        }
-        
-        case state$idleRR: {
-          
-             unlockDoor(output);
-          
-             lockPanel(output);
-          
-          
-          if (doorClosed(token)) {
-             state = state$active;
-          }
-          
-          if (doorOpened(token)) {
-             state = state$idle;
-          }
-          
-          if (lockPanel(token)) {
-             state = state$idleRRR;
-          }
-          
-          /* Add here your specific logic for the state */
           break;
         }
         
@@ -227,21 +130,25 @@ public class missgrant {
   private void unlockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNUL\n");
     output.flush();
+    // Add more asdsadsdaYES and YES code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNLK\n");
     output.flush();
+    // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1LK\n");
     output.flush();
+    // 
   }
   
   private void unlockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1UL\n");
     output.flush();
+    // Addsdjkfhfsdjkfhksdjhjksfdhkjhsfdk more code here
   }
   
 }

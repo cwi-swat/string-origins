@@ -1,9 +1,9 @@
 // a comment
 
 events
- doorClosed D1CL
- drawerOpened D2OP
- lightOn L1ON
+ run_ D1CL
+ token D2OP
+ run L1ON
  doorOpened D1OP
  panelClosed PNCL
 end 
@@ -23,23 +23,23 @@ end
   
 state idle
  actions {unlockDoor lockPanel}
- doorClosed => active 
+ run_ => active 
 end
 
 
 state active
- drawerOpened => waitingForLight
- lightOn => waitingForDrawer 
+ token => waitingForLight
+ run => waitingForDrawer 
 end 
 
 
 state waitingForLight 
- lightOn => unlockedPanel 
+ run => unlockedPanel 
 end  
 
 
 state waitingForDrawer
- drawerOpened => unlockedPanel
+ token => unlockedPanel
 end 
 
  
@@ -47,3 +47,4 @@ state unlockedPanel
  actions {unlockPanel lockDoor}
  panelClosed => idle 
 end
+
