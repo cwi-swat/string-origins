@@ -5,12 +5,11 @@ events
  token D2OP
  run L1ON
  while D1OP
- panelClosed PNCL
+ while_ SHOULDBECOMEWHILE__
 end 
 
 
 resetEvents 
- while
 end 
 
 commands
@@ -40,11 +39,12 @@ end
 
 state waitingForDrawer
  token => unlockedPanel
+ while => waitingForLight
 end 
 
  
 state unlockedPanel
  actions {unlockPanel lockDoor}
- panelClosed => idle 
+ while_ => idle 
 end
 

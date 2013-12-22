@@ -31,10 +31,6 @@ public class missgrantclash {
              state = state$active;
           }
           
-          if (while(token)) {
-             state = state$idle;
-          }
-          
           break;
         }
         
@@ -49,10 +45,6 @@ public class missgrantclash {
              state = state$waitingForDrawer;
           }
           
-          if (while(token)) {
-             state = state$idle;
-          }
-          
           break;
         }
         
@@ -61,10 +53,6 @@ public class missgrantclash {
           
           if (run(token)) {
              state = state$unlockedPanel;
-          }
-          
-          if (while(token)) {
-             state = state$idle;
           }
           
           break;
@@ -78,7 +66,7 @@ public class missgrantclash {
           }
           
           if (while(token)) {
-             state = state$idle;
+             state = state$waitingForLight;
           }
           
           break;
@@ -91,11 +79,7 @@ public class missgrantclash {
              lockDoor(output);
           
           
-          if (panelClosed(token)) {
-             state = state$idle;
-          }
-          
-          if (while(token)) {
+          if (while_(token)) {
              state = state$idle;
           }
           
@@ -122,8 +106,8 @@ public class missgrantclash {
     return token.equals("D1OP");
   }
   
-  private boolean panelClosed(String token) {
-    return token.equals("PNCL");
+  private boolean while_(String token) {
+    return token.equals("SHOULDBECOMEWHILE__");
   }
   
   
