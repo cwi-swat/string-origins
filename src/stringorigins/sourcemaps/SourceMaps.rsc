@@ -5,6 +5,19 @@ import util::Maybe;
 import stringorigins::names::FixNames; // for reconstruct
 import util::ShellExec;
 import IO;
+import lang::missgrant::base::Compile2JS;
+import lang::missgrant::base::Implode;
+
+loc gen = |project://string-origins/src/input/missgrant.mapgen|;
+loc input = |project://string-origins/src/input/missgrant.ctl|;
+loc output = |project://string-origins/src/input/missgrant.js|;
+
+void mapGen() {
+  ast = load(input);
+  js = compile2js("missgrant", ast);
+  mg = sourceMapGenerator(js, input, output);
+  writeFile(gen, mg);
+}
 
 str sourceMapGenerator(str src, loc input, loc output, set[str] names = {}) {
   recon = reconstruct(origins(src), output);

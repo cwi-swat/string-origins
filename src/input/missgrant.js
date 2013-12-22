@@ -125,20 +125,22 @@ missgrant = (function () {
   
   
   missgrant.unlockPanel = function() {
-    console.log("PNUL\n");
+    console.log("PNUL");
   };
   
   missgrant.lockPanel = function() {
-    console.log("PNLK\n");
+    console.log("PNLK");
   };
   
   missgrant.lockDoor = function() {
-    console.log("D1LK\n");
+    console.log("D1LK");
   };
   
   missgrant.unlockDoor = function() {
-    console.log("D1UL\n");
+    console.log("D1UL");
   };
   
   return missgrant;
 })();
+
+//@ sourceMappingURL=missgrant.js.map

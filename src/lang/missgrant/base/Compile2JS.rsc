@@ -15,7 +15,10 @@ str compile2js(str name, Controller ctl) =
        '  <command2js(name, c)>
        '  <}>
        '  return <name>;
-       '})();";
+       '})();
+       '
+       '//# sourceMappingURL=<name>.js.map
+       '";
 
 str states2consts(str obj, list[State] states) {
   i = 0;

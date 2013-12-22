@@ -1,0 +1,499 @@
+var src = require('source-map');
+var map = new src.SourceMapGenerator({file: "missgrant.js"});
+map.addMapping({
+  generated: {
+    line: 4,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 23,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 6,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 29,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 8,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 35,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 10,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 40,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 12,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 45,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 15,
+    column: 27
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 23,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 20,
+    column: 24
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 23,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 22,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 24,
+    column: 10
+  }
+});
+map.addMapping({
+  generated: {
+    line: 24,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 24,
+    column: 21
+  }
+});
+map.addMapping({
+  generated: {
+    line: 27,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 25,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 28,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 25,
+    column: 15
+  }
+});
+map.addMapping({
+  generated: {
+    line: 34,
+    column: 24
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 29,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 37,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 30,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 38,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 30,
+    column: 17
+  }
+});
+map.addMapping({
+  generated: {
+    line: 41,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 31,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 42,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 31,
+    column: 12
+  }
+});
+map.addMapping({
+  generated: {
+    line: 48,
+    column: 24
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 35,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 51,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 36,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 52,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 36,
+    column: 12
+  }
+});
+map.addMapping({
+  generated: {
+    line: 58,
+    column: 24
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 40,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 61,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 41,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 62,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 41,
+    column: 17
+  }
+});
+map.addMapping({
+  generated: {
+    line: 68,
+    column: 24
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 45,
+    column: 6
+  }
+});
+map.addMapping({
+  generated: {
+    line: 70,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 46,
+    column: 10
+  }
+});
+map.addMapping({
+  generated: {
+    line: 72,
+    column: 18
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 46,
+    column: 22
+  }
+});
+map.addMapping({
+  generated: {
+    line: 75,
+    column: 19
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 47,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 76,
+    column: 32
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 47,
+    column: 16
+  }
+});
+map.addMapping({
+  generated: {
+    line: 86,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 4,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 87,
+    column: 22
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 4,
+    column: 12
+  }
+});
+map.addMapping({
+  generated: {
+    line: 90,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 5,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 91,
+    column: 22
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 5,
+    column: 14
+  }
+});
+map.addMapping({
+  generated: {
+    line: 94,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 6,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 95,
+    column: 22
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 6,
+    column: 9
+  }
+});
+map.addMapping({
+  generated: {
+    line: 98,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 7,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 99,
+    column: 22
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 7,
+    column: 12
+  }
+});
+map.addMapping({
+  generated: {
+    line: 102,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 8,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 103,
+    column: 22
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 8,
+    column: 13
+  }
+});
+map.addMapping({
+  generated: {
+    line: 107,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 16,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 108,
+    column: 17
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 16,
+    column: 13
+  }
+});
+map.addMapping({
+  generated: {
+    line: 111,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 17,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 112,
+    column: 17
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 17,
+    column: 11
+  }
+});
+map.addMapping({
+  generated: {
+    line: 115,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 18,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 116,
+    column: 17
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 18,
+    column: 10
+  }
+});
+map.addMapping({
+  generated: {
+    line: 119,
+    column: 12
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 20,
+    column: 1
+  }
+});
+map.addMapping({
+  generated: {
+    line: 120,
+    column: 17
+  },
+  source: "missgrant.ctl",
+  original: {
+    line: 20,
+    column: 12
+  }
+});
+
+console.log(map.toString());
