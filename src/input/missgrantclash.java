@@ -4,23 +4,23 @@ public class missgrantclash {
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int state$idle = 0;
+  private static final int if_ = 0;
   
-  private static final int state$active = 1;
+  private static final int active = 1;
   
-  private static final int state$waitingForLight = 2;
+  private static final int waitingForLight = 2;
   
-  private static final int state$waitingForDrawer = 3;
+  private static final int waitingForDrawer = 3;
   
-  private static final int state$unlockedPanel = 4;
+  private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = state$idle;
+    int state = if_;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case state$idle: {
+        case if_: {
           
              unlockDoor(output);
           
@@ -28,51 +28,51 @@ public class missgrantclash {
           
           
           if (run_(token)) {
-             state = state$active;
+             state = active;
           }
           
           break;
         }
         
-        case state$active: {
+        case active: {
           
           
           if (token_(token)) {
-             state = state$waitingForLight;
+             state = waitingForLight;
           }
           
           if (run__(token)) {
-             state = state$waitingForDrawer;
+             state = waitingForDrawer;
           }
           
           break;
         }
         
-        case state$waitingForLight: {
+        case waitingForLight: {
           
           
           if (run__(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           break;
         }
         
-        case state$waitingForDrawer: {
+        case waitingForDrawer: {
           
           
           if (token_(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           if (while__(token)) {
-             state = state$waitingForLight;
+             state = waitingForLight;
           }
           
           break;
         }
         
-        case state$unlockedPanel: {
+        case unlockedPanel: {
           
              unlockPanel(output);
           
@@ -80,7 +80,7 @@ public class missgrantclash {
           
           
           if (while_(token)) {
-             state = state$idle;
+             state = if_;
           }
           
           break;

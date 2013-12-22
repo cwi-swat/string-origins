@@ -4,7 +4,7 @@ public class missgrantclash {
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int state$idle = 0;
+  private static final int state$if = 0;
   
   private static final int state$active = 1;
   
@@ -15,12 +15,12 @@ public class missgrantclash {
   private static final int state$unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = state$idle;
+    int state = state$if;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case state$idle: {
+        case state$if: {
           
              unlockDoor(output);
           
@@ -80,7 +80,7 @@ public class missgrantclash {
           
           
           if (while_(token)) {
-             state = state$idle;
+             state = state$if;
           }
           
           break;

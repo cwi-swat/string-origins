@@ -20,7 +20,7 @@ commands
  unlockDoor D1UL
 end
   
-state idle
+state if
  actions {unlockDoor lockPanel}
  run_ => active 
 end
@@ -45,6 +45,6 @@ end
  
 state unlockedPanel
  actions {unlockPanel lockDoor}
- while_ => idle 
+ while_ => if 
 end
 

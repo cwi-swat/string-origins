@@ -9,6 +9,17 @@ import IO;
 This function ensures that the names in `src` which originate
 from `input` are disjoint from `keywords` and any other names
 occuring in `src` (according to `extract`). 
+
+Assumptions:
+- source names are used consistently (i.e. there is no
+  intentional capture of synthesized names) 
+- source names occur as single chunks in the origin lrel of `src`
+- synthesized names are ok, and will never renamed
+
+Notes:
+- this is a conservative fixing operation: it will rename any source
+  name that might possibly clash with keywords, clash with synthesized
+  names, be captured by synthesized names, or capture synthesized names. 
 }
 str fixNames(str src, loc input, loc output, 
              rel[str,loc](str, loc) extract, 
@@ -27,7 +38,8 @@ str fixNames(str src, loc input, loc output,
   // this strategy is conservative: it might rename more than needed. 
   // Note that after `extract` a concatenated
   // name will be seen as one name, which will not be in `recon` 
-  // (cf. below), hence it will then act as a synthesized name. 
+  // (cf. below), hence it will then act as a synthesized name and
+  // never be renamed.  
   // NB: this approximation is needed to avoid introducing clashes
   // of renamed keywords with other source names. For instance, renaming
   // source name "while" to "while_" introduces a clash if "while_"

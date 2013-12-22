@@ -67,4 +67,4 @@ str state2case(State s) =
          '}";
 
 str stateName(State s) = stateName(s.name);
-str stateName(str s) = "state$<s>";
+str stateName(str s) = s; //"state$<s>";
