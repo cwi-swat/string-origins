@@ -2,17 +2,22 @@ module stringorigins::names::Names
 
 import String;
 import util::Maybe;
-import lang::java::jdt::m3::Core;
 import lang::missgrant::base::Compile;
 import lang::missgrant::base::Implode;
 import IO;
 import List;
+import ParseTree;
+import lang::java::\syntax::Java15;
+
+rel[str, loc] extractJavaNames(CompilationUnit u, loc file) { 
+   loc fix(loc l) = l[path=file.path][scheme=file.scheme][authority=file.authority];
+   
+   return { <"<x>", fix(x@\loc)> | /Id x := u };
+}
 
 loc missgrant = |project://string-origins/src/input/missgrantclash.ctl|;
 str missgrantClass = "missgrantclash";
 loc missgrantJava = |project://string-origins/src/input/missgrantclash.java|;
-
-rel[str, loc] physicalNames(M3 m) = m@names o (m@uses<1,0> + m@declarations);
 
 str missgrantJavaNames() {
    ctl = load(missgrant);
@@ -24,9 +29,9 @@ str missgrantJavaNames() {
 }
 
 str fixJavaNameClashes(str src, loc input, loc output) {
-   writeFile(output, src);
-   M3 m3 = createM3FromFile(output);
-   names = physicalNames(m3);
+   cu = parse(#start[CompilationUnit], src);
+   names = extractJavaNames(cu.top, output);
+   iprintln(names);
    return fixNameClashes(src, input, output, names);
 }
 
