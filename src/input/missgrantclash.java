@@ -4,7 +4,7 @@ public class missgrantclash {
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int if_ = 0;
+  private static final int if__ = 0;
   
   private static final int active = 1;
   
@@ -15,12 +15,12 @@ public class missgrantclash {
   private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = if_;
+    int state = if__;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case if_: {
+        case if__: {
           
              unlockDoor(output);
           
@@ -37,7 +37,7 @@ public class missgrantclash {
         case active: {
           
           
-          if (token_(token)) {
+          if (if_(token)) {
              state = waitingForLight;
           }
           
@@ -61,7 +61,7 @@ public class missgrantclash {
         case waitingForDrawer: {
           
           
-          if (token_(token)) {
+          if (if_(token)) {
              state = unlockedPanel;
           }
           
@@ -80,7 +80,7 @@ public class missgrantclash {
           
           
           if (while_(token)) {
-             state = if_;
+             state = if__;
           }
           
           break;
@@ -94,7 +94,7 @@ public class missgrantclash {
     return token.equals("D1CL");
   }
   
-  private boolean token_(String token) {
+  private boolean if_(String token) {
     return token.equals("D2OP");
   }
   

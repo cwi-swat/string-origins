@@ -2,7 +2,7 @@
 
 events
  run_ D1CL
- token D2OP
+ if_ D2OP
  run L1ON
  while D1OP
  while_ SHOULDBECOMEWHILE__
@@ -27,7 +27,7 @@ end
 
 
 state active
- token => waitingForLight
+ if_ => waitingForLight
  run => waitingForDrawer 
 end 
 
@@ -38,7 +38,7 @@ end
 
 
 state waitingForDrawer
- token => unlockedPanel
+ if_ => unlockedPanel
  while => waitingForLight
 end 
 

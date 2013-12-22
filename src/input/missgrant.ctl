@@ -8,7 +8,6 @@ events
  panelClosed PNCL
 end 
 
-
 resetEvents 
  doorOpened
 end 

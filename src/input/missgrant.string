@@ -4,23 +4,23 @@ public class missgrant {
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int state$idle = 0;
+  private static final int idle = 0;
   
-  private static final int state$active = 1;
+  private static final int active = 1;
   
-  private static final int state$waitingForLight = 2;
+  private static final int waitingForLight = 2;
   
-  private static final int state$waitingForDrawer = 3;
+  private static final int waitingForDrawer = 3;
   
-  private static final int state$unlockedPanel = 4;
+  private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = state$idle;
+    int state = idle;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case state$idle: {
+        case idle: {
           
              unlockDoor(output);
           
@@ -28,63 +28,63 @@ public class missgrant {
           
           
           if (doorClosed(token)) {
-             state = state$active;
+             state = active;
           }
           
           if (doorOpened(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           break;
         }
         
-        case state$active: {
+        case active: {
           
           
           if (drawerOpened(token)) {
-             state = state$waitingForLight;
+             state = waitingForLight;
           }
           
           if (lightOn(token)) {
-             state = state$waitingForDrawer;
+             state = waitingForDrawer;
           }
           
           if (doorOpened(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           break;
         }
         
-        case state$waitingForLight: {
+        case waitingForLight: {
           
           
           if (lightOn(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           if (doorOpened(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           break;
         }
         
-        case state$waitingForDrawer: {
+        case waitingForDrawer: {
           
           
           if (drawerOpened(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           if (doorOpened(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           break;
         }
         
-        case state$unlockedPanel: {
+        case unlockedPanel: {
           
              unlockPanel(output);
           
@@ -92,11 +92,11 @@ public class missgrant {
           
           
           if (panelClosed(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           if (doorOpened(token)) {
-             state = state$idle;
+             state = idle;
           }
           
           break;

@@ -37,7 +37,7 @@ public class missgrantclash {
         case state$active: {
           
           
-          if (token(token)) {
+          if (if_(token)) {
              state = state$waitingForLight;
           }
           
@@ -61,7 +61,7 @@ public class missgrantclash {
         case state$waitingForDrawer: {
           
           
-          if (token(token)) {
+          if (if_(token)) {
              state = state$unlockedPanel;
           }
           
@@ -94,7 +94,7 @@ public class missgrantclash {
     return token.equals("D1CL");
   }
   
-  private boolean token(String token) {
+  private boolean if_(String token) {
     return token.equals("D2OP");
   }
   
