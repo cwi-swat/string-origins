@@ -6,6 +6,7 @@ import lang::missgrant::base::Implode;
 import lang::missgrant::base::Check;
 import lang::missgrant::base::Desugar;
 import lang::missgrant::base::Compile;
+import lang::missgrant::base::Compile2JS;
 import lang::missgrant::base::Rename;
 import lang::missgrant::base::Visualize;
 import lang::missgrant::base::Extract;
@@ -79,6 +80,8 @@ void main() {
     		   writeFile((pt@\loc)[extension="java"], generated);
                writeFile((pt@\loc)[extension="string"], generated);
                writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
+               
+               writeFile((pt@\loc)[extension="js"], compile2js(class, ctl));
                return {};
     		 }),
     		 
