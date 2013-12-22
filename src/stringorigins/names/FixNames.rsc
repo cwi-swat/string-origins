@@ -20,6 +20,10 @@ Notes:
 - this is a conservative fixing operation: it will rename any source
   name that might possibly clash with keywords, clash with synthesized
   names, be captured by synthesized names, or capture synthesized names. 
+- it does *not* require name analysis on either source language or 
+  target language. However, it does require a way to extract all names
+  from the generated `src` after keyword collisions have been resolved
+  (e.g. through name analysis, or parsing and finding all identifiers).
 }
 str fixNames(str src, loc input, loc output, 
              rel[str,loc](str, loc) extract, 
@@ -115,6 +119,8 @@ str fresh(str x, set[str] names, str suf) {
 }
 
 
+// TODO: this should be coded in Java, to avoid
+// nesting of orgstrings in orgstrings. 
 str yield(lrel[Maybe[loc], str] orgs) 
   = ( "" | it + x | <_, x> <- orgs );
 
