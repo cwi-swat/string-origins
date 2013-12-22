@@ -17,7 +17,7 @@ str compile2js(str name, Controller ctl) =
        '  return <name>;
        '})();
        '
-       '//# sourceMappingURL=<name>.js.map
+       '//@ sourceMappingURL=<name>.js.map
        '";
 
 str states2consts(str obj, list[State] states) {
