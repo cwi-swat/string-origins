@@ -16,12 +16,18 @@ str fixNames(str src, loc input, loc output,
 
   lrel[Maybe[loc], str] orgs = origins(src);
   
-  // conservatively approximate the set of source names from `orgs`
+  // Conservatively approximate the set of source names from `orgs`
   // We assume that sourcenames in `orgs` are individual chunks
   // so we find all of them, but maybe more (e.g., in concatenated
   // names <x>_something; in this case the substring will be renamed
   // as well, but this is not a problem because it will happen
-  // consistently everywhere).
+  // consistently everywhere). In fact, even if no clash exists
+  // (because, say, there's only "while_object" and never "while")
+  // we will still rename "while_object" to "while__object". IOW
+  // this strategy is conservative: it might rename more than needed. 
+  // Note that after `extract` a concatenated
+  // name will be seen as one name, which will not be in `recon` 
+  // (cf. below), hence it will then act as a synthesized name. 
   // NB: this approximation is needed to avoid introducing clashes
   // of renamed keywords with other source names. For instance, renaming
   // source name "while" to "while_" introduces a clash if "while_"
@@ -35,8 +41,8 @@ str fixNames(str src, loc input, loc output,
   // All names we now know of are source names.
   set[str] allNames0 = srcNames0<0>;
   
-  for (x <- srcNames0<0> & keywords) {
-    newName = fresh(x, allNames0, suf);
+  for (str x <- srcNames0<0> & keywords) {
+    str newName = fresh(x, allNames0, suf);
     println("Renaming keyword <x> to <newName>");
     allNames0 += {newName};
     renaming += ( org: newName | <x, org> <- srcNames0 );
@@ -64,6 +70,8 @@ str fixNames(str src, loc input, loc output,
   // synthesized names. Example: renamed "while" to "while_" but now
   // there is a synthesized name "while_"; in this case the source name
   // "while_" will have to be renamed to "while__". 
+  // NB: `srcNames` is in terms of output locations, not origins, so
+  // that we can subtract from `names` to find synthesized names (see below).
   rel[str, loc] srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- recon, 
                                       org.path == input.path };
                  
