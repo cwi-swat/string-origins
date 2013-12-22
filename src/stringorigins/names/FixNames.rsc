@@ -16,15 +16,30 @@ str fixNames(str src, loc input, loc output,
 
   lrel[Maybe[loc], str] orgs = origins(src);
   
-  // Construct renaming for source names that
-  // are keywords.
-  map[loc, str] renaming = 
-    ( org: suffix(x, suf) /* x[0..-1] + "_"*/ 
-          |  <just(loc org), x> <- orgs, 
-              org.path == input.path, x in keywords);
-
-  for (str x <- renaming<1>) {
-    println("Renaming keyword name <x[0..-1]> to <x>");
+  // conservatively approximate the set of source names from `orgs`
+  // We assume that sourcenames in `orgs` are individual chunks
+  // so we find all of them, but maybe more (e.g., in concatenated
+  // names <x>_something; in this case the substring will be renamed
+  // as well, but this is not a problem because it will happen
+  // consistently everywhere).
+  // NB: this approximation is needed to avoid introducing clashes
+  // of renamed keywords with other source names. For instance, renaming
+  // source name "while" to "while_" introduces a clash if "while_"
+  // is an existing source name. 
+  rel[str, loc] srcNames0 = { <x, org> | <just(loc org), x> <- orgs, 
+                              org.path == input.path }; 
+  
+  // Construct a renaming to rename source names to keywords.
+  map[loc, str] renaming = ();
+  
+  // All names we now know of are source names.
+  set[str] allNames0 = srcNames0<0>;
+  
+  for (x <- srcNames0<0> & keywords) {
+    newName = fresh(x, allNames0, suf);
+    println("Renaming keyword <x> to <newName>");
+    allNames0 += {newName};
+    renaming += ( org: newName | <x, org> <- srcNames0 );
   } 
 
   // Apply renaming of keyword identifiers
@@ -42,17 +57,22 @@ str fixNames(str src, loc input, loc output,
   // this could be more robust. 
   lrel[str, loc, loc] recon = reconstruct(orgs, output);
   
-  rel[str, loc] srcNames = { < x, l> | <x, l> <- names, <x, l, org> <- recon, 
-                                      org.path == input.path,
-                                      // exclude renamed keywords from srcNames 
-                                      org notin renaming };
+  // Get the set of *real* source names (e.g. names as identified as such
+  // by `extract` which originate from the source).
+  // Note that this includes renamed keywords as per the previous phase,
+  // which is as it should be, these renamings can still clash with
+  // synthesized names. Example: renamed "while" to "while_" but now
+  // there is a synthesized name "while_"; in this case the source name
+  // "while_" will have to be renamed to "while__". 
+  rel[str, loc] srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- recon, 
+                                      org.path == input.path };
                  
   
   rel[str, loc] otherNames = names - srcNames;
   set[str] clashed = srcNames<0> & otherNames<0>;
   set[str] allNames = names<0>;
   
-  // start with a clean renaming (keyword renaming have been applied)
+  // start with a clean renaming (keyword renamings have been applied on orgs)
   renaming = ();
   
   // rename all occurrences of source name `x` with a fresh name. 

@@ -65,7 +65,7 @@ public class missgrantclash {
              state = state$unlockedPanel;
           }
           
-          if (while_(token)) {
+          if (while__(token)) {
              state = state$waitingForLight;
           }
           
@@ -79,7 +79,7 @@ public class missgrantclash {
              lockDoor(output);
           
           
-          if (while__(token)) {
+          if (while_(token)) {
              state = state$idle;
           }
           
@@ -102,11 +102,11 @@ public class missgrantclash {
     return token.equals("L1ON");
   }
   
-  private boolean while_(String token) {
+  private boolean while__(String token) {
     return token.equals("D1OP");
   }
   
-  private boolean while__(String token) {
+  private boolean while_(String token) {
     return token.equals("SHOULDBECOMEWHILE__");
   }
   
