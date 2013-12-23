@@ -12,7 +12,7 @@ Tree orgParse(lrel[Maybe[loc], str] orgs, loc src) {
   Tree toTree(str x, loc l) {
     if (l.scheme != "rascal") { 
       // input substring
-      return toTree(x, {\tag("category"("MetaVariable"))});
+      return toTree(x, {\tag("category"("MetaKeyword"))});
     }
     return toTree(x);
   }
@@ -21,6 +21,15 @@ Tree orgParse(lrel[Maybe[loc], str] orgs, loc src) {
   
   Tree toTree(str x, set[Attr] as) 
     = appl(prod(\lex("Unknown"), [], as), [\char(c) | c <- chars(x) ]);
+  
+  loc convert(loc l) {
+    if (l.scheme == "rascal") {
+      s = replaceAll(l.authority, "::", "/") + ".rsc";
+      l = |project://string-origins/src/<s>|(l.offset, l.length,
+            <l.begin.line, l.begin.column>, <l.end.line, l.end.column>);
+    }
+    return l;
+  }
   
   args = for (<org, str sub> <- orgs) {
     cur.length = size(sub);
@@ -34,7 +43,7 @@ Tree orgParse(lrel[Maybe[loc], str] orgs, loc src) {
       cur.end.column += size(sub);
     }
     if (just(loc l) := org) {
-      append toTree(sub, l)[@link=l][@\loc=cur];
+      append toTree(sub, l)[@link=convert(l)][@\loc=cur];
     }
     else {
       append toTree(sub)[@\loc=cur];

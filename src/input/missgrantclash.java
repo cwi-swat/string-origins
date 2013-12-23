@@ -1,10 +1,10 @@
-public class missgrant {
+public class missgrantclash {
   public static void main(String args[]) throws java.io.IOException { 
-     new missgrant().run(new java.util.Scanner(System.in), 
+     new missgrantclash().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int idle = 0;
+  private static final int if__ = 0;
   
   private static final int active = 1;
   
@@ -15,24 +15,20 @@ public class missgrant {
   private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = idle;
+    int state = if__;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case idle: {
+        case if__: {
           
              unlockDoor(output);
           
              lockPanel(output);
           
           
-          if (doorClosed(token)) {
+          if (run_(token)) {
              state = active;
-          }
-          
-          if (doorOpened(token)) {
-             state = idle;
           }
           
           break;
@@ -41,16 +37,12 @@ public class missgrant {
         case active: {
           
           
-          if (drawerOpened(token)) {
+          if (if_(token)) {
              state = waitingForLight;
           }
           
-          if (lightOn(token)) {
+          if (run__(token)) {
              state = waitingForDrawer;
-          }
-          
-          if (doorOpened(token)) {
-             state = idle;
           }
           
           break;
@@ -59,12 +51,8 @@ public class missgrant {
         case waitingForLight: {
           
           
-          if (lightOn(token)) {
+          if (run__(token)) {
              state = unlockedPanel;
-          }
-          
-          if (doorOpened(token)) {
-             state = idle;
           }
           
           break;
@@ -73,12 +61,12 @@ public class missgrant {
         case waitingForDrawer: {
           
           
-          if (drawerOpened(token)) {
+          if (if_(token)) {
              state = unlockedPanel;
           }
           
-          if (doorOpened(token)) {
-             state = idle;
+          if (while__(token)) {
+             state = waitingForLight;
           }
           
           break;
@@ -91,12 +79,8 @@ public class missgrant {
              lockDoor(output);
           
           
-          if (panelClosed(token)) {
-             state = idle;
-          }
-          
-          if (doorOpened(token)) {
-             state = idle;
+          if (while_(token)) {
+             state = if__;
           }
           
           break;
@@ -106,31 +90,31 @@ public class missgrant {
     }
   }
   
-  private boolean doorClosed(String token) {
+  private boolean run_(String token) {
     return token.equals("D1CL");
   }
   
-  private boolean drawerOpened(String token) {
+  private boolean if_(String token) {
     return token.equals("D2OP");
   }
   
-  private boolean lightOn(String token) {
+  private boolean run__(String token) {
     return token.equals("L1ON");
   }
   
-  private boolean doorOpened(String token) {
+  private boolean while__(String token) {
     return token.equals("D1OP");
   }
   
-  private boolean panelClosed(String token) {
-    return token.equals("PNCL");
+  private boolean while_(String token) {
+    return token.equals("SHOULDBECOMEWHILE__");
   }
   
   
   private void unlockPanel(java.io.Writer output) throws java.io.IOException {
     output.write("PNUL\n");
     output.flush();
-    // Add more asdsadsdaYES and YES code here
+    // Add more code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
@@ -142,13 +126,13 @@ public class missgrant {
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1LK\n");
     output.flush();
-    // 
+    // Add more code here
   }
   
   private void unlockDoor(java.io.Writer output) throws java.io.IOException {
     output.write("D1UL\n");
     output.flush();
-    // Addsdjkfhfsdjkfhksdjhjksfdhkjhsfdk more code here
+    // Add more code here
   }
   
 }

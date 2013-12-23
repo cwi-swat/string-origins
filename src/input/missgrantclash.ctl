@@ -1,15 +1,15 @@
 // a comment
 
 events
- doorClosed D1CL
- drawerOpened D2OP
- lightOn L1ON
- doorOpened D1OP
- panelClosed PNCL
+ run_ D1CL
+ if_ D2OP
+ run L1ON
+ while D1OP
+ while_ SHOULDBECOMEWHILE__
 end 
 
+
 resetEvents 
- doorOpened
 end 
 
 commands
@@ -20,29 +20,31 @@ commands
  unlockDoor D1UL
 end
   
-state idle
+state if
  actions {unlockDoor lockPanel}
- doorClosed => active 
+ run_ => active 
 end
 
 
 state active
- drawerOpened => waitingForLight
- lightOn => waitingForDrawer 
+ if_ => waitingForLight
+ run => waitingForDrawer 
 end 
 
 
 state waitingForLight 
- lightOn => unlockedPanel 
+ run => unlockedPanel 
 end  
 
 
 state waitingForDrawer
- drawerOpened => unlockedPanel
+ if_ => unlockedPanel
+ while => waitingForLight
 end 
 
  
 state unlockedPanel
  actions {unlockPanel lockDoor}
- panelClosed => idle 
+ while_ => if 
 end
+
