@@ -11,6 +11,6 @@ end
 commands
 end
   
-state if
+state foo
 end
 

@@ -1,24 +1,24 @@
-public class keywordIsRenamedButNotToSourceName {
-  private static String if_ = "keywordIsRenamedButNotToSourceName";
+public class keywordIsRenamedButNotToGenName {
+  private static String if_ = "keywordIsRenamedButNotToGenName";
   public static void main(String args[]) throws java.io.IOException { 
-     new keywordIsRenamedButNotToSourceName().run(new java.util.Scanner(System.in), 
+     new keywordIsRenamedButNotToGenName().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int while__ = 0;
+  private static final int foo = 0;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = while__;
+    int state = foo;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case while__: {
-          // Handle while
+        case foo: {
+          // Handle foo
           
           
-          if (while_(token)) {
-             state = while__;
+          if (if__(token)) {
+             state = foo;
           }
           
           break;
@@ -28,7 +28,7 @@ public class keywordIsRenamedButNotToSourceName {
     }
   }
   
-  private boolean while_(String token) {
+  private boolean if__(String token) {
     return token.equals("D1OP");
   }
   

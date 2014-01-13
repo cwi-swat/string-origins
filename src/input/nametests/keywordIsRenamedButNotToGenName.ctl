@@ -1,7 +1,7 @@
 // a comment
 
 events
- while_ D1OP
+ if D1OP
 end 
 
 
@@ -11,7 +11,7 @@ end
 commands
 end
   
-state while
-  while_ => while
+state foo
+  if => foo
 end
 

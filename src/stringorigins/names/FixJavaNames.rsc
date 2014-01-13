@@ -49,6 +49,13 @@ test bool keywordIsRenamedButNotToSourceName() {
     ""; 
 }
 
+test bool keywordIsRenamedButNotToGenName() {
+  return 
+    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToGenName.ctl|)
+    ==
+    ""; 
+}
+
 test bool disjointSourceSynth() {
   return 
     fixCtl(|project://string-origins/src/input/nametests/disjointSourceSynth.ctl|)

@@ -1,4 +1,5 @@
 public class renameKnowsSourceNames {
+  private static String if_ = "renameKnowsSourceNames";
   public static void main(String args[]) throws java.io.IOException { 
      new renameKnowsSourceNames().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
