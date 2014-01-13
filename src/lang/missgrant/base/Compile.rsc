@@ -29,6 +29,7 @@ str states2consts(list[State] states) {
 
 str command2java(Command command) =
          "private void <command.name>(java.io.Writer output) throws java.io.IOException {
+         '  System.err.println(\"Executing <command.name>\");
          '  output.write(\"<command.token>\\n\");
          '  output.flush();
          '  <protected("// Add more code here", command.name)>
@@ -55,6 +56,7 @@ str controller2run(Controller ctl) =
 
 str state2case(State s) =
          "case <stateName(s)>: {
+         '  // Handle <stateName(s)>
          '  <for (a <- s.actions) {>
          '     <a>(output);
          '  <}>

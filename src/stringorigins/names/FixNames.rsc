@@ -5,6 +5,9 @@ import util::Maybe;
 import List;
 import IO;
 
+alias Rename = tuple[str old, str new];
+
+
 @doc{
 This function ensures that the names in `src` which originate
 from `input` are disjoint from `keywords` and any other names
@@ -52,16 +55,16 @@ str fixNames(str src, loc input, loc output,
                               org.path == input.path }; 
   
   // Construct a renaming to rename source names to keywords.
-  map[loc, str] renaming = ();
+  map[loc, Rename] renaming = ();
   
-  // All names we now know of are source names.
+  // All "names" we now know of are source names.
   set[str] allNames0 = srcNames0<0>;
   
   for (str x <- srcNames0<0> & keywords) {
     str newName = fresh(x, allNames0, suf);
     println("Renaming keyword <x> to <newName>");
     allNames0 += {newName};
-    renaming += ( org: newName | <x, org> <- srcNames0 );
+    renaming += ( org: <x, newName> | <x, org> <- srcNames0 );
   } 
 
   // Apply renaming of keyword identifiers
@@ -92,6 +95,25 @@ str fixNames(str src, loc input, loc output,
                                       org.path == input.path };
                  
   
+  unrename = ( l: renaming[org]  | loc org <- renaming, <str x, loc l, org> <- recon, <x, l> notin names ); 
+  println("Renamed but not a name: ");
+  iprintln(unrename);
+  
+  if (unrename != ()) {
+    // Unrename things that are not names
+    orgs = [ <just(org), l in unrename ? unrename[l].old : x> | <x, l, org> <- recon ];
+    
+    // Reconstruct again, because offsets in target locations might have changed
+    // NB: this could be optimized by merging unrename and reconstruct.
+    recon = reconstruct(orgs, output);
+  }
+  
+  
+  
+  // Is this right: l covers the x not, unrename[l].old???
+  recon = [ <l in unrename ? unrename[l].old : x, l, org> | <x, l, org> <- recon ];
+  
+  
   rel[str, loc] otherNames = names - srcNames;
   set[str] clashed = srcNames<0> & otherNames<0>;
   set[str] allNames = names<0>;
@@ -104,7 +126,7 @@ str fixNames(str src, loc input, loc output,
     str newName = fresh(x, allNames, suf);
     allNames += {newName};
     println("Renaming source name <x> to <newName>");
-    renaming += ( org: newName | <x, l> <- srcNames, <x, l, org> <- recon );
+    renaming += ( org: <x, newName> | <x, l> <- srcNames, <x, l, org> <- recon );
   }
  
   return yield(rename(orgs, renaming));
@@ -161,10 +183,10 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
 }
 
 
-lrel[Maybe[loc], str] rename(lrel[Maybe[loc], str] src, map[loc, str] renaming) {
+lrel[Maybe[loc], str] rename(lrel[Maybe[loc], str] src, map[loc, Rename] renaming) {
   return for (<org, str n> <- src) {
     if (just(loc l) := org, l in renaming) {
-      append <org, renaming[l]>;
+      append <org, renaming[l].new>;
     }
     else {
       append <org, n>;
