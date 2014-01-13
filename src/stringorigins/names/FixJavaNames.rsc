@@ -19,14 +19,6 @@ loc missgrantJava = |project://string-origins/src/input/missgrantclash.java|;
 
 void missgrantJavaNames() {
   fixCtl(missgrant);
-   //ctl = load(missgrant);
-   //src = compile(missgrantClass, ctl);
-   //
-   //rel[str,loc] extract(str x, loc l) 
-   //  = extractJavaNames(parse(#start[CompilationUnit], x, l).top);
-   //
-   //src = fixNames(src, missgrant, missgrantJava, extract, keywords = javaKeywords());
-   //writeFile(missgrantJava, src);
 }
 
 
@@ -42,6 +34,39 @@ str fixCtl(loc file) {
    writeFile(javaFile, src);
    return src;
 }
+
+test bool keywordIsRenamed() {
+  return 
+    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamed.ctl|)
+    ==
+    ""; 
+}
+
+test bool keywordIsRenamedButNotToSourceName() {
+  return 
+    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToSourceName.ctl|)
+    ==
+    ""; 
+}
+
+test bool disjointSourceSynth() {
+  return 
+    fixCtl(|project://string-origins/src/input/nametests/disjointSourceSynth.ctl|)
+    ==
+    ""; 
+}
+
+test bool renameKnowsSourceNames() {
+  return 
+    fixCtl(|project://string-origins/src/input/nametests/renameKnowsSourceNames.ctl|)
+    ==
+    ""; 
+}
+
+
+
+
+
 
 
 set[str] javaKeywords() =

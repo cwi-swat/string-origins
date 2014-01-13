@@ -12,11 +12,19 @@ alias Orgs = lrel[Maybe[loc], str];
 alias SourceMap = lrel[str substring, loc target, loc origin];
 
 @doc{
+
 Assumptions:
 - names from the source are copied into the generated code
 - constructed names by concatenation do not generate keywords
   (e.g. if "<name>f" produces "if", it won't be detected as keyword)
 - name binding is consistent; there's no intentional capture of synth names.
+- the renaming of keywords will never overlap with synthesized names
+  (e.g. don't use synthesized name "if_" and suffix "_" if "if" is an allowed 
+  source name)
+- note that this works even better on ASTs, because we then can *really* 
+  distinguish source from generated names during keyword fixing (without
+  having to approximate). 
+
 }
 str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract, 
              set[str] keywords = {}, str suf = "_") {
@@ -45,7 +53,9 @@ str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract,
   smap = fixSemanticNames(smap, names, input, output, suf);
 
   return yield(smap);
+
 }
+
 
 
 tuple[SourceMap,Renamed,Renaming] fixKeywords(SourceMap smap, loc input, set[str] keywords, str suf) {
