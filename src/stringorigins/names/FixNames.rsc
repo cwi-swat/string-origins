@@ -5,7 +5,71 @@ import util::Maybe;
 import List;
 import IO;
 
+alias Renaming = map[loc org, Rename rename];
 alias Rename = tuple[str old, str new];
+alias Orgs = lrel[Maybe[loc], str];
+alias SourceMap = lrel[str substring, loc target, loc origin];
+
+str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract, set[str] keywords = {}, str suf = "_") {
+  smap = reconstruct(origins(src), output);
+
+  // Rename keywords without having to parse the code
+  <smap, renaming> = fixKeywords(smap, input, keywords, suf);
+
+  // Extract names according to target language syntax
+  names = extract(yield(smap), output);
+
+  // Undo false positives: things that are not a name, but were renamed
+  smap = unrenameNonNames(smap, renaming, names, output);
+  
+  // Ensure that source names are disjoint from other names.
+  smap = fixSemanticNames(smap, names, input, output, suf);
+
+  return yield(smap);
+}
+
+
+tuple[SourceMap result, Renaming renaming] fixKeywords(SourceMap smap, loc input, set[str] keywords, str suf) {
+  rel[str, loc] srcNames0 = { <x, org> | <x, _, org> <- smap, org.path == input.path }; 
+  
+  set[str] allNames0 = srcNames0<0>;
+  map[loc, Rename] renaming = ();
+
+  for (str x <- srcNames0<0> & keywords) {
+    str newName = fresh(x, allNames0, suf);
+    allNames0 += {newName};
+    renaming += ( org: <x, newName> | <x, org> <- srcNames0 );
+  } 
+
+  return <rename(smap, renaming), renaming>;
+}
+
+SourceMap unrenameNonNames(SourceMap smap, Renaming renaming, rel[str, loc] names, loc output) {
+  unrename = ( l: renaming[org]  | loc org <- renaming, <str x, loc l, org> <- smap, <x, l> notin names );
+  
+  // TODO (?): offsets l are wrong now, but since we do not need to 
+  // extract names again, this does not matter, otherwise implement
+  // unrename same as rename.
+  return [ <l in unrename ? unrename[l].old : x, l, org> | <x, l, org> <- smap ];
+}
+
+
+SourceMap fixSemanticNames(SourceMap smap, rel[str,loc] names, loc input, loc output, str suf) {
+  rel[str, loc] srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- smap, org.path == input.path };
+  rel[str, loc] otherNames = names - srcNames;
+  
+  set[str] clashed = srcNames<0> & otherNames<0>;
+  set[str] allNames = srcNames<0> + otherNames<0>;
+  
+  renaming = ();
+  for (str x <- clashed) {
+    str newName = fresh(x, allNames, suf);
+    allNames += {newName};
+    renaming += ( org: <x, newName> | <x, l> <- srcNames, <x, l, org> <- smap );
+  }
+ 
+  return rename(smap, renaming);
+} 
 
 
 @doc{
@@ -28,7 +92,7 @@ Notes:
   from the generated `src` after keyword collisions have been resolved
   (e.g. through name analysis, or parsing and finding all identifiers).
 }
-str fixNames(str src, loc input, loc output, 
+str fixNames_monolith(str src, loc input, loc output, 
              rel[str,loc](str, loc) extract, 
              set[str] keywords = {}, str suf = "_") {
 
@@ -109,11 +173,7 @@ str fixNames(str src, loc input, loc output,
   }
   
   
-  
-  // Is this right: l covers the x not, unrename[l].old???
-  recon = [ <l in unrename ? unrename[l].old : x, l, org> | <x, l, org> <- recon ];
-  
-  
+    
   rel[str, loc] otherNames = names - srcNames;
   set[str] clashed = srcNames<0> & otherNames<0>;
   set[str] allNames = names<0>;
@@ -145,6 +205,9 @@ str fresh(str x, set[str] names, str suf) {
 // nesting of orgstrings in orgstrings. 
 str yield(lrel[Maybe[loc], str] orgs) 
   = ( "" | it + x | <_, x> <- orgs );
+  
+str yield(SourceMap smap) 
+  = ( "" | it + x | <x, _, _> <- smap );
 
 
 @doc{
@@ -183,14 +246,30 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
 }
 
 
-lrel[Maybe[loc], str] rename(lrel[Maybe[loc], str] src, map[loc, Rename] renaming) {
-  return for (<org, str n> <- src) {
-    if (just(loc l) := org, l in renaming) {
-      append <org, renaming[l].new>;
+Orgs rename(Orgs src, Renaming renaming) 
+  = [ <org, just(loc l) := org && l in renaming ? renaming[l].new : n> | <org, n> <- SRC ];
+
+SourceMap rename_(SourceMap src, Renaming renaming) 
+  = [ <org in renaming ? renaming[org].new : x, l, org> | <x, l, org> <- src ]; 
+
+  
+  
+  
+SourceMap rename(SourceMap src, Renaming renaming) {
+  shift = 0;
+  return for (<x, l, org> <- src) {
+    l.offset += shift;
+    if (org in renaming) {
+      delta = size(renaming[org].new) - size(renaming[org].old);
+      l.length += delta;
+      l.end.column += delta;
+      shift += delta;
+      append <renaming[org].new, l, org>;
     }
     else {
-      append <org, n>;
+      append <x, l, org>;
     }
-  }
-}
+  }  
+} 
 
+  
