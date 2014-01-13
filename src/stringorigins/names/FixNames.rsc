@@ -45,12 +45,12 @@ tuple[SourceMap result, Renaming renaming] fixKeywords(SourceMap smap, loc input
 }
 
 SourceMap unrenameNonNames(SourceMap smap, Renaming renaming, rel[str, loc] names, loc output) {
-  unrename = ( l: renaming[org]  | loc org <- renaming, <str x, loc l, org> <- smap, <x, l> notin names );
+  unrenaming = ( l: renaming[org]  | loc org <- renaming, <str x, loc l, org> <- smap, <x, l> notin names );
   
   // TODO (?): offsets l are wrong now, but since we do not need to 
-  // extract names again, this does not matter, otherwise implement
-  // unrename same as rename.
-  return [ <l in unrename ? unrename[l].old : x, l, org> | <x, l, org> <- smap ];
+  // extract names again, and the next phase is just looks at the old locs anyway,
+  //  this does not matter, otherwise implement unrename same as rename.
+  return [ <l in unrenaming ? unrenaming[l].old : x, l, org> | <x, l, org> <- smap ];
 }
 
 
@@ -59,7 +59,7 @@ SourceMap fixSemanticNames(SourceMap smap, rel[str,loc] names, loc input, loc ou
   rel[str, loc] otherNames = names - srcNames;
   
   set[str] clashed = srcNames<0> & otherNames<0>;
-  set[str] allNames = srcNames<0> + otherNames<0>;
+  set[str] allNames = names<0>;
   
   renaming = ();
   for (str x <- clashed) {
@@ -71,7 +71,76 @@ SourceMap fixSemanticNames(SourceMap smap, rel[str,loc] names, loc input, loc ou
   return rename(smap, renaming);
 } 
 
+str suffix(str x, str suf) = "<x><suf>";
 
+str fresh(str x, set[str] names, str suf) {
+  while (x in names) 
+    x = suffix(x, suf);
+  return x;
+}
+
+
+str yield(SourceMap smap) = ( "" | it + x | <x, _, _> <- smap );
+
+
+@doc{
+
+An lrel coming from origins()) maps (source or meta program) origins to 
+output string fragments. This functions reconstructs the source locations
+of each chunk according to occurence in the output. 
+}
+// str, loc (src loc), loc (origin)
+lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
+  cur = |<src.scheme>://<src.authority><src.path>|(0, 0, <1, 0>, <1,0>);
+ 
+  result = for (<org, str sub> <- orgs) {
+    cur.length = size(sub);
+    nls = size(findAll(sub, "\n"));
+    cur.end.line += nls;
+    if (nls != 0) {
+      // reset
+      cur.end.column = size(sub) - findLast(sub, "\n") - 1;
+    }
+    else {
+      cur.end.column += size(sub);
+    }
+    if (just(loc l) := org) {
+      append <sub, cur, l>;
+    }
+    else {
+      throw "No origin: \'<sub>\'";
+    }
+    cur.offset += size(sub);
+    cur.begin.column = cur.end.column;
+    cur.begin.line = cur.end.line;
+  }
+  
+  return result;
+}
+
+SourceMap rename(SourceMap src, Renaming renaming) {
+  shift = 0;
+  return for (<x, l, org> <- src) {
+    l.offset += shift;
+    if (org in renaming) {
+      delta = size(renaming[org].new) - size(renaming[org].old);
+      l.length += delta;
+      l.end.column += delta;
+      shift += delta;
+      append <renaming[org].new, l, org>;
+    }
+    else {
+      append <x, l, org>;
+    }
+  }  
+} 
+
+  
+  
+  
+  
+  // Just for the comments.
+  
 @doc{
 This function ensures that the names in `src` which originate
 from `input` are disjoint from `keywords` and any other names
@@ -191,85 +260,4 @@ str fixNames_monolith(str src, loc input, loc output,
  
   return yield(rename(orgs, renaming));
 }
-
-str suffix(str x, str suf) = "<x><suf>";
-
-str fresh(str x, set[str] names, str suf) {
-  while (x in names) 
-    x = suffix(x, suf);
-  return x;
-}
-
-
-// TODO: this should be coded in Java, to avoid
-// nesting of orgstrings in orgstrings. 
-str yield(lrel[Maybe[loc], str] orgs) 
-  = ( "" | it + x | <_, x> <- orgs );
-  
-str yield(SourceMap smap) 
-  = ( "" | it + x | <x, _, _> <- smap );
-
-
-@doc{
-
-An lrel coming from origins()) maps (source or meta program) origins to 
-output string fragments. This functions reconstructs the source locations
-of each chunk according to occurence in the output. 
-}
-// str, loc (src loc), loc (origin)
-lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
-  cur = |<src.scheme>://<src.authority><src.path>|(0, 0, <1, 0>, <1,0>);
- 
-  result = for (<org, str sub> <- orgs) {
-    cur.length = size(sub);
-    nls = size(findAll(sub, "\n"));
-    cur.end.line += nls;
-    if (nls != 0) {
-      // reset
-      cur.end.column = size(sub) - findLast(sub, "\n") - 1;
-    }
-    else {
-      cur.end.column += size(sub);
-    }
-    if (just(loc l) := org) {
-      append <sub, cur, l>;
-    }
-    else {
-      throw "No origin: \'<sub>\'";
-    }
-    cur.offset += size(sub);
-    cur.begin.column = cur.end.column;
-    cur.begin.line = cur.end.line;
-  }
-  
-  return result;
-}
-
-
-Orgs rename(Orgs src, Renaming renaming) 
-  = [ <org, just(loc l) := org && l in renaming ? renaming[l].new : n> | <org, n> <- SRC ];
-
-SourceMap rename_(SourceMap src, Renaming renaming) 
-  = [ <org in renaming ? renaming[org].new : x, l, org> | <x, l, org> <- src ]; 
-
-  
-  
-  
-SourceMap rename(SourceMap src, Renaming renaming) {
-  shift = 0;
-  return for (<x, l, org> <- src) {
-    l.offset += shift;
-    if (org in renaming) {
-      delta = size(renaming[org].new) - size(renaming[org].old);
-      l.length += delta;
-      l.end.column += delta;
-      shift += delta;
-      append <renaming[org].new, l, org>;
-    }
-    else {
-      append <x, l, org>;
-    }
-  }  
-} 
-
   
