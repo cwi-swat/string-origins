@@ -7,20 +7,39 @@ import IO;
 
 alias Renaming = map[loc org, Rename rename];
 alias Rename = tuple[str old, str new];
+alias Renamed = map[loc from, loc new];
 alias Orgs = lrel[Maybe[loc], str];
 alias SourceMap = lrel[str substring, loc target, loc origin];
 
-str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract, set[str] keywords = {}, str suf = "_") {
+@doc{
+Assumptions:
+- names from the source are copied into the generated code
+- constructed names by concatenation do not generate keywords
+  (e.g. if "<name>f" produces "if", it won't be detected as keyword)
+- name binding is consistent; there's no intentional capture of synth names.
+}
+str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract, 
+             set[str] keywords = {}, str suf = "_") {
   smap = reconstruct(origins(src), output);
 
   // Rename keywords without having to parse the code
-  <smap, renaming> = fixKeywords(smap, input, keywords, suf);
+  <smap, renamed, renaming> = fixKeywords(smap, input, keywords, suf);
 
   // Extract names according to target language syntax
+  // At this point names are "compatible" with smap
   names = extract(yield(smap), output);
 
+  // Update the renaming of keywords so that its domain
+  // is in terms of locs *after* the renaming.
+  renaming = ( renamed[l]: renaming[l] | l <- renaming );
   // Undo false positives: things that are not a name, but were renamed
-  smap = unrenameNonNames(smap, renaming, names, output);
+  <smap, renamed> = unrenameNonNames(smap, renaming, names, output);
+  
+  // Make sure that locations of names extracted before unrename
+  // are compatible with the target locations in smap.
+  // NB: all source names of interest are in both names and in smap
+  // so renamed will have the locs of all relevant names in its domain.
+  names = { <x, l in renamed ? renamed[l] : l> | <x, l> <- names };
   
   // Ensure that source names are disjoint from other names.
   smap = fixSemanticNames(smap, names, input, output, suf);
@@ -29,46 +48,44 @@ str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract, set
 }
 
 
-tuple[SourceMap result, Renaming renaming] fixKeywords(SourceMap smap, loc input, set[str] keywords, str suf) {
-  rel[str, loc] srcNames0 = { <x, org> | <x, _, org> <- smap, org.path == input.path }; 
-  
-  set[str] allNames0 = srcNames0<0>;
-  map[loc, Rename] renaming = ();
+tuple[SourceMap,Renamed,Renaming] fixKeywords(SourceMap smap, loc input, set[str] keywords, str suf) {
+  srcNames = { <x, l> | <x, l, org> <- smap, org.path == input.path }; 
+  allNames = srcNames<0>;
 
-  for (str x <- srcNames0<0> & keywords) {
-    str newName = fresh(x, allNames0, suf);
-    allNames0 += {newName};
-    renaming += ( org: <x, newName> | <x, org> <- srcNames0 );
+  renaming = makeRenaming(srcNames<0> & keywords, allNames, srcNames, suf);
+
+  <smap, renamed> = rename(smap, renaming);
+  return <smap, renamed, renaming>;
+}
+
+tuple[SourceMap,Renamed] unrenameNonNames(SourceMap smap, Renaming renaming, 
+                          rel[str, loc] names, loc output) {
+  unrenaming = ( l: <renaming[l].new, renaming[l].old> | 
+                   loc l <- renaming, 
+                   <renaming[l].new, l> notin names );
+  return rename(smap, unrenaming);
+}
+
+Renaming makeRenaming(set[str] toRename, set[str] allNames, rel[str,loc] srcNames, str suf) {
+  renaming = ();  
+  for (str x <- toRename) {
+    newName = fresh(x, allNames, suf);
+    allNames += {newName};
+    renaming += ( l: <x, newName> | <x, l> <- srcNames );
   } 
-
-  return <rename(smap, renaming), renaming>;
+  return renaming;
 }
-
-SourceMap unrenameNonNames(SourceMap smap, Renaming renaming, rel[str, loc] names, loc output) {
-  unrenaming = ( l: renaming[org]  | loc org <- renaming, <str x, loc l, org> <- smap, <x, l> notin names );
-  
-  // TODO (?): offsets l are wrong now, but since we do not need to 
-  // extract names again, and the next phase is just looks at the old locs anyway,
-  //  this does not matter, otherwise implement unrename same as rename.
-  return [ <l in unrenaming ? unrenaming[l].old : x, l, org> | <x, l, org> <- smap ];
-}
-
 
 SourceMap fixSemanticNames(SourceMap smap, rel[str,loc] names, loc input, loc output, str suf) {
-  rel[str, loc] srcNames = { <x, l> | <x, l> <- names, <x, l, org> <- smap, org.path == input.path };
-  rel[str, loc] otherNames = names - srcNames;
+  srcNames = { <x, l> | <x, l, org> <- smap, 
+                        <x, l> in names, org.path == input.path };
   
-  set[str] clashed = srcNames<0> & otherNames<0>;
-  set[str] allNames = names<0>;
+  otherNames = names - srcNames;
   
-  renaming = ();
-  for (str x <- clashed) {
-    str newName = fresh(x, allNames, suf);
-    allNames += {newName};
-    renaming += ( org: <x, newName> | <x, l> <- srcNames, <x, l, org> <- smap );
-  }
- 
-  return rename(smap, renaming);
+  renaming = makeRenaming(srcNames<0> & otherNames<0>, names<0>, srcNames, suf); 
+  
+  <smap, _> = rename(smap, renaming);
+  return smap;
 } 
 
 str suffix(str x, str suf) = "<x><suf>";
@@ -118,21 +135,25 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
   return result;
 }
 
-SourceMap rename(SourceMap src, Renaming renaming) {
+tuple[SourceMap,Renamed] rename(SourceMap src, Renaming renaming) {
   shift = 0;
-  return for (<x, l, org> <- src) {
-    l.offset += shift;
-    if (org in renaming) {
-      delta = size(renaming[org].new) - size(renaming[org].old);
-      l.length += delta;
-      l.end.column += delta;
+  renamed = ();
+  src = for (<x, l, org> <- src) {
+    newl = l;
+    newl.offset += shift;
+    if (l in renaming) {
+      delta = size(renaming[l].new) - size(renaming[l].old);
+      newl.length += delta;
+      newl.end.column += delta;
       shift += delta;
-      append <renaming[org].new, l, org>;
+      append <renaming[l].new, newl, org>;
     }
     else {
-      append <x, l, org>;
+      append <x, newl, org>;
     }
-  }  
+    renamed[l] = newl;
+  }
+  return <src, renamed>;  
 } 
 
   

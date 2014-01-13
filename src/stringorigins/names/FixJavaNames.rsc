@@ -18,14 +18,29 @@ str missgrantClass = "missgrantclash";
 loc missgrantJava = |project://string-origins/src/input/missgrantclash.java|;
 
 void missgrantJavaNames() {
-   ctl = load(missgrant);
-   src = compile(missgrantClass, ctl);
+  fixCtl(missgrant);
+   //ctl = load(missgrant);
+   //src = compile(missgrantClass, ctl);
+   //
+   //rel[str,loc] extract(str x, loc l) 
+   //  = extractJavaNames(parse(#start[CompilationUnit], x, l).top);
+   //
+   //src = fixNames(src, missgrant, missgrantJava, extract, keywords = javaKeywords());
+   //writeFile(missgrantJava, src);
+}
+
+
+str fixCtl(loc file) {
+   ctl = load(file);
+   javaFile = file[extension="java"];
+   src = compile(setOrigins(split(".", file.file)[0], [javaFile]), ctl);
    
    rel[str,loc] extract(str x, loc l) 
      = extractJavaNames(parse(#start[CompilationUnit], x, l).top);
    
-   src = fixNames(src, missgrant, missgrantJava, extract, keywords = javaKeywords());
-   writeFile(missgrantJava, src);
+   src = fixNames(src, file, javaFile, extract, keywords = javaKeywords());
+   writeFile(javaFile, src);
+   return src;
 }
 
 

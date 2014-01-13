@@ -17,11 +17,11 @@ commands
  lockPanel PNLK
  lockDoor D1LK
  
- unlockDoor D1UL
+ token D1UL
 end
   
 state if
- actions {unlockDoor lockPanel}
+ actions {token lockPanel}
  run_ => active 
 end
 
