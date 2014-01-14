@@ -3,7 +3,7 @@ module stringorigins::names::FixNamesAST
 import String;
 import IO;
 
-tuple[set[&T],set[&T]] split(list[&T] s, bool(&T) pred) 
+tuple[set[&T],set[&T]] partition(list[&T] s, bool(&T) pred) 
   = < { x | x <- s, pred(x) }, { x | x <- s, !pred(x) }>; 
 
 
@@ -21,7 +21,7 @@ str fresh(str x, set[str] names) {
 &T fixNames(&T ast, list[str] names, set[str] keywords, loc input) {
   bool isSrc(str x) = any(l <- originsOnly(x), l.path == input.path);
   
-  <src, other> = split(names, isSrc);
+  <src, other> = partition(names, isSrc);
   foreign = other + keywords;
   allNames = src + foreign;
   clashed = src & foreign;
@@ -29,9 +29,10 @@ str fresh(str x, set[str] names) {
   map[str,str] renaming = ();
   str rename(str x) {
     if (x notin renaming) {
-      renaming[x] = fresh(x, allNames);
+      y = fresh(x, allNames);
+      renaming[x] = y;
+      allNames += y;
     }
-    bprintln("Renaming <x> to <renaming[x]>");
     return renaming[x];
   } 
   
