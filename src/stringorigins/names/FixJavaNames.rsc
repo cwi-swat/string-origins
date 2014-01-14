@@ -36,38 +36,28 @@ str fixCtl(loc file) {
 }
 
 test bool keywordIsRenamed() {
-  return 
-    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamed.ctl|)
-    ==
-    ""; 
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamed.ctl|);
+  return true; 
 }
 
 test bool keywordIsRenamedButNotToSourceName() {
-  return 
-    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToSourceName.ctl|)
-    ==
-    ""; 
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToSourceName.ctl|);
+  return true;
 }
 
 test bool keywordIsRenamedButNotToGenName() {
-  return 
-    fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToGenName.ctl|)
-    ==
-    ""; 
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToGenName.ctl|);
+  return true;
 }
 
 test bool disjointSourceSynth() {
-  return 
-    fixCtl(|project://string-origins/src/input/nametests/disjointSourceSynth.ctl|)
-    ==
-    ""; 
+  fixCtl(|project://string-origins/src/input/nametests/disjointSourceSynth.ctl|);
+  return true;
 }
 
 test bool renameKnowsSourceNames() {
-  return 
-    fixCtl(|project://string-origins/src/input/nametests/renameKnowsSourceNames.ctl|)
-    ==
-    ""; 
+  fixCtl(|project://string-origins/src/input/nametests/renameKnowsSourceNames.ctl|);
+  return true;
 }
 
 
