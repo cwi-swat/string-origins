@@ -25,6 +25,9 @@ private list[State] mergeStates(Controller ctl1, Controller ctl2) {
   
   str merge(State s1, State s2) {
 	    nn = "<s1.name>__<s2.name>";
+	    //a__b__c
+	    //m1 a__b, a
+	    //m2 b__c, c
 	  
 	    if (nn in memo)
 	      return nn;
