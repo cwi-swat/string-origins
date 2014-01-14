@@ -1,7 +1,18 @@
 module stringorigins::names::FixNamesAST
 
-tuple[set[&T],set[&T]] split(set[&T] s, bool(&T) pred) 
+import String;
+import IO;
+
+tuple[set[&T],set[&T]] split(list[&T] s, bool(&T) pred) 
   = < { x | x <- s, pred(x) }, { x | x <- s, !pred(x) }>; 
+
+
+str fresh(str x, set[str] names) {
+  while (x in names) 
+    x = x + "_";
+  return x;
+}
+
 
 // assumes all strings in ASTs are names. 
 &T fixNames(&T ast, set[str] keywords, loc input) 
@@ -15,11 +26,14 @@ tuple[set[&T],set[&T]] split(set[&T] s, bool(&T) pred)
   allNames = src + foreign;
   clashed = src & foreign;
   
+  map[str,str] renaming = ();
   str rename(str x) {
-    x = fresh(allNames, x);
-    allNames += x;
-    return x;
-  }
+    if (x notin renaming) {
+      renaming[x] = fresh(x, allNames);
+    }
+    bprintln("Renaming <x> to <renaming[x]>");
+    return renaming[x];
+  } 
   
   return visit (ast) {
     case str x => rename(x)
