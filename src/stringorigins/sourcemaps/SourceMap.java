@@ -42,10 +42,12 @@ public class SourceMap {
 			if (mapping.has("name")) {
 				name = ((IString)mapping.get("name")).getValue();
 			}
-			gen.addMapping(new File(original.getPath()).getName(), name, 
-					new FilePosition(original.getBeginLine(), original.getBeginColumn()),
-					new FilePosition(generated.getBeginLine(), generated.getBeginColumn()),
-					new FilePosition(generated.getEndLine(), generated.getEndColumn()));
+			String path = new File(original.getPath()).getName();
+			gen.addMapping(path, name,
+					// V3 FilePosition requires 0 based line counting.
+					new FilePosition(original.getBeginLine() - 1 , original.getBeginColumn()),
+					new FilePosition(generated.getBeginLine() - 1, generated.getBeginColumn()),
+					new FilePosition(generated.getEndLine() - 1, generated.getEndColumn()));
 		}
 		StringWriter str = new StringWriter();
 		try {

@@ -28,6 +28,8 @@ end
 
 state active
  drawerOpened => waitingForLight
+ 
+ 
  lightOn => waitingForDrawer 
 end 
 

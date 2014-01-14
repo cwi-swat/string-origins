@@ -18,15 +18,52 @@ str missgrantClass = "missgrantclash";
 loc missgrantJava = |project://string-origins/src/input/missgrantclash.java|;
 
 void missgrantJavaNames() {
-   ctl = load(missgrant);
-   src = compile(missgrantClass, ctl);
+  fixCtl(missgrant);
+}
+
+
+str fixCtl(loc file) {
+   ctl = load(file);
+   javaFile = file[extension="java"];
+   src = compile(setOrigins(split(".", file.file)[0], [javaFile]), ctl);
    
    rel[str,loc] extract(str x, loc l) 
      = extractJavaNames(parse(#start[CompilationUnit], x, l).top);
    
-   src = fixNames(src, missgrant, missgrantJava, extract, keywords = javaKeywords());
-   writeFile(missgrantJava, src);
+   src = fixNames(src, file, javaFile, extract, keywords = javaKeywords());
+   writeFile(javaFile, src);
+   return src;
 }
+
+test bool keywordIsRenamed() {
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamed.ctl|);
+  return true; 
+}
+
+test bool keywordIsRenamedButNotToSourceName() {
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToSourceName.ctl|);
+  return true;
+}
+
+test bool keywordIsRenamedButNotToGenName() {
+  fixCtl(|project://string-origins/src/input/nametests/keywordIsRenamedButNotToGenName.ctl|);
+  return true;
+}
+
+test bool disjointSourceSynth() {
+  fixCtl(|project://string-origins/src/input/nametests/disjointSourceSynth.ctl|);
+  return true;
+}
+
+test bool renameKnowsSourceNames() {
+  fixCtl(|project://string-origins/src/input/nametests/renameKnowsSourceNames.ctl|);
+  return true;
+}
+
+
+
+
+
 
 
 set[str] javaKeywords() =

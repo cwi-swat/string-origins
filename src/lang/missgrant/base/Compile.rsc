@@ -6,6 +6,7 @@ import stringorigins::escaping::Protect;
 
 str compile(str name, Controller ctl) =
        "public class <name> {
+       '  private static String if_ = \"<name>\";
        '  public static void main(String args[]) throws java.io.IOException { 
        '     new <name>().run(new java.util.Scanner(System.in), 
        '                    new java.io.PrintWriter(System.out));
@@ -29,6 +30,8 @@ str states2consts(list[State] states) {
 
 str command2java(Command command) =
          "private void <command.name>(java.io.Writer output) throws java.io.IOException {
+         '  System.err.println(\"Executing <command.name>\");
+         '  int <command.name>_var;
          '  output.write(\"<command.token>\\n\");
          '  output.flush();
          '  <protected("// Add more code here", command.name)>
@@ -55,6 +58,7 @@ str controller2run(Controller ctl) =
 
 str state2case(State s) =
          "case <stateName(s)>: {
+         '  // Handle <stateName(s)>
          '  <for (a <- s.actions) {>
          '     <a>(output);
          '  <}>

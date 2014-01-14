@@ -5,7 +5,7 @@ events
  if_ D2OP
  run L1ON
  while D1OP
- while_ SHOULDBECOMEWHILE__
+ while_ BLA
 end 
 
 
@@ -13,15 +13,15 @@ resetEvents
 end 
 
 commands
- unlockPanel PNUL
+ class PNUL
  lockPanel PNLK
  lockDoor D1LK
  
- unlockDoor D1UL
+ token D1UL
 end
   
 state if
- actions {unlockDoor lockPanel}
+ actions {token lockPanel}
  run_ => active 
 end
 
@@ -44,7 +44,7 @@ end
 
  
 state unlockedPanel
- actions {unlockPanel lockDoor}
+ actions {class lockDoor}
  while_ => if 
 end
 
