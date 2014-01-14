@@ -75,7 +75,6 @@ void main() {
     		   }
     		   theOrigins = origins(generated); // NB: origins after plugging
     		   newRegions = calculateRegions(theOrigins);
-    		   iprintln(newRegions);
     		   writeTextValueFile(regions, newRegions);
     		   writeFile(out, generated);
     		   writeFile((pt@\loc)[extension="java"], generated);
@@ -83,13 +82,11 @@ void main() {
                writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
                
                jsloc = (pt@\loc)[extension="js"];
-               js = compile2js(class, ctl);
+               js = compile2js(setOrigins(class, [pt@\loc]), ctl);
                writeFile(jsloc, js);
                
-               mg = string2sourceMap(js, [pt@\loc], jsloc);
-               println("Sourcemap = <mg>");
+               mg = ctlSourceMap(js, pt@\loc, jsloc, { x | /str x := ctl });
                maploc = (pt@\loc)[extension="js.map"];
-               println(maploc);
                writeFile(maploc, mg);
                return {};
     		 }),

@@ -1,10 +1,11 @@
 public class missgrantclash {
+  private static String if_ = "missgrantclash";
   public static void main(String args[]) throws java.io.IOException { 
      new missgrantclash().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int if__ = 0;
+  private static final int if = 0;
   
   private static final int active = 1;
   
@@ -15,15 +16,15 @@ public class missgrantclash {
   private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = if__;
+    int state = if;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case if__: {
+        case if: {
           // Handle if
           
-             token_(output);
+             token(output);
           
              lockPanel(output);
           
@@ -43,7 +44,7 @@ public class missgrantclash {
              state = waitingForLight;
           }
           
-          if (run__(token)) {
+          if (run(token)) {
              state = waitingForDrawer;
           }
           
@@ -54,7 +55,7 @@ public class missgrantclash {
           // Handle waitingForLight
           
           
-          if (run__(token)) {
+          if (run(token)) {
              state = unlockedPanel;
           }
           
@@ -69,7 +70,7 @@ public class missgrantclash {
              state = unlockedPanel;
           }
           
-          if (while__(token)) {
+          if (while(token)) {
              state = waitingForLight;
           }
           
@@ -79,13 +80,13 @@ public class missgrantclash {
         case unlockedPanel: {
           // Handle unlockedPanel
           
-             class_(output);
+             class(output);
           
              lockDoor(output);
           
           
           if (while_(token)) {
-             state = if__;
+             state = if;
           }
           
           break;
@@ -103,11 +104,11 @@ public class missgrantclash {
     return token.equals("D2OP");
   }
   
-  private boolean run__(String token) {
+  private boolean run(String token) {
     return token.equals("L1ON");
   }
   
-  private boolean while__(String token) {
+  private boolean while(String token) {
     return token.equals("D1OP");
   }
   
@@ -116,7 +117,7 @@ public class missgrantclash {
   }
   
   
-  private void class_(java.io.Writer output) throws java.io.IOException {
+  private void class(java.io.Writer output) throws java.io.IOException {
     System.err.println("Executing class");
     int class_var;
     output.write("PNUL\n");
@@ -140,7 +141,7 @@ public class missgrantclash {
     // Add more code here
   }
   
-  private void token_(java.io.Writer output) throws java.io.IOException {
+  private void token(java.io.Writer output) throws java.io.IOException {
     System.err.println("Executing token");
     int token_var;
     output.write("D1UL\n");
