@@ -24,20 +24,37 @@ void mapGen() {
   
   js = compile2js("missgrant", ast);
   writeFile(output, js);
-  mg = string2sourceMap(js, [input], output);
+  mgg = string2sourceMapGenerator(js, input, output);
+  mg = evalJS(mgg);
   println(mg);
   writeFile(srcmap, mg);
 }
 
-str string2sourceMap(str src, list[loc] inputs, loc output, set[str] names = {}) {
-  println("Constructing sourcemap for <output>");
+str string2sourceMapGenerator(str src, loc input, loc output, set[str] names = {}) {
   recon = reconstruct(origins(src), output);
-  mappings = [ x in names ? mapping(l, org,  x) : mapping(l, org) | 
-               <x, l, org> <- recon, any(i <- inputs, 
-               org.path == i.path, /break/ := org.query ) ];
-  iprintln(mappings);
-  return generateSourceMap(sourceMap(output.file, mappings));
+  mappings = [ mapping(l, org, x in names ? x : "") | 
+               <x, l, org> <- recon, org.path == input.path,
+               /break/ := org.query ];
+  return
+    "var map = new sourceMap.SourceMapGenerator({file: \"<output.file>\"});
+    '<for (m <- mappings) {>map.addMapping(<m>);
+    '<}>
+    'map.toString();";
 }
+
+str mapping(loc gen, loc org, str name) 
+  = "{
+    '  generated: {
+    '    line: <gen.begin.line>,
+    '    column: <gen.begin.column>
+    '  },
+    '  source: \"<org.file>\",
+    '  original: {
+    '    line: <org.begin.line>,
+    '    column: <org.begin.column>
+    '  }<if (name != "") {>,
+    '  name: \"<name>\"<}>
+    '}";
 
 data SourceMap
   = sourceMap(str file, list[Mapping] mappings)
@@ -48,6 +65,5 @@ data Mapping
   | mapping(loc generated, loc original, str name)
   ;
  
-@javaClass{stringorigins.sourcemaps.SourceMap}
-java str generateSourceMap(SourceMap sourceMap);
- 
+@javaClass{stringorigins.sourcemaps.RunRhino}
+java str evalJS(str x);
