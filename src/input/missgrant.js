@@ -28,6 +28,10 @@ missgrant = (function () {
              state = this.state$active;
           }
           
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
+          }
+          
           break;
         }
         
@@ -42,6 +46,10 @@ missgrant = (function () {
              state = this.state$waitingForDrawer;
           }
           
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
+          }
+          
           break;
         }
         
@@ -52,6 +60,10 @@ missgrant = (function () {
              state = this.state$unlockedPanel;
           }
           
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
+          }
+          
           break;
         }
         
@@ -60,6 +72,10 @@ missgrant = (function () {
           
           if (this.drawerOpened(token)) {
              state = this.state$unlockedPanel;
+          }
+          
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
           }
           
           break;
@@ -73,6 +89,10 @@ missgrant = (function () {
           
           
           if (this.panelClosed(token)) {
+             state = this.state$idle;
+          }
+          
+          if (this.doorOpened(token)) {
              state = this.state$idle;
           }
           

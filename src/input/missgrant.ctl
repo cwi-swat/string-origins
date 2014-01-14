@@ -1,11 +1,14 @@
-// a comment
-
 events
- doorClosed D1CL
- drawerOpened D2OP
- lightOn L1ON
- doorOpened D1OP
- panelClosed PNCL
+ doorClosed 
+   D1CL
+ drawerOpened 
+   D2OP
+ lightOn 
+   L1ON
+ doorOpened 
+   D1OP
+ panelClosed 
+   PNCL
 end 
 
 resetEvents 
@@ -13,11 +16,14 @@ resetEvents
 end 
 
 commands
- unlockPanel PNUL
- lockPanel PNLK
- lockDoor D1LK
- 
- unlockDoor D1UL
+ unlockPanel
+   PNUL
+ lockPanel
+   PNLK
+ lockDoor
+   D1LK
+ unlockDoor 
+   D1UL
 end
   
 state idle

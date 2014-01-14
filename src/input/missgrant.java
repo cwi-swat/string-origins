@@ -1,4 +1,5 @@
 public class missgrant {
+  private static String if_ = "missgrant";
   public static void main(String args[]) throws java.io.IOException { 
      new missgrant().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
@@ -21,6 +22,7 @@ public class missgrant {
       switch (state) {
         
         case idle: {
+          // Handle idle
           
              unlockDoor(output);
           
@@ -39,6 +41,7 @@ public class missgrant {
         }
         
         case active: {
+          // Handle active
           
           
           if (drawerOpened(token)) {
@@ -57,6 +60,7 @@ public class missgrant {
         }
         
         case waitingForLight: {
+          // Handle waitingForLight
           
           
           if (lightOn(token)) {
@@ -71,6 +75,7 @@ public class missgrant {
         }
         
         case waitingForDrawer: {
+          // Handle waitingForDrawer
           
           
           if (drawerOpened(token)) {
@@ -85,6 +90,7 @@ public class missgrant {
         }
         
         case unlockedPanel: {
+          // Handle unlockedPanel
           
              unlockPanel(output);
           
@@ -128,24 +134,32 @@ public class missgrant {
   
   
   private void unlockPanel(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing unlockPanel");
+    int unlockPanel_var;
     output.write("PNUL\n");
     output.flush();
     // Add more asdsadsdaYES and YES code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockPanel");
+    int lockPanel_var;
     output.write("PNLK\n");
     output.flush();
     // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockDoor");
+    int lockDoor_var;
     output.write("D1LK\n");
     output.flush();
     // 
   }
   
   private void unlockDoor(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing unlockDoor");
+    int unlockDoor_var;
     output.write("D1UL\n");
     output.flush();
     // Addsdjkfhfsdjkfhksdjhjksfdhkjhsfdk more code here

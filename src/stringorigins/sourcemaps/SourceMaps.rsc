@@ -11,14 +11,28 @@ str generateSourceMap(str js, loc input, loc output, set[str] names = {})
 
 str string2sourceMapGenerator(str src, loc input, loc output, set[str] names) {
   recon = reconstruct(origins(src), output);
-  mappings = [ mapping(l, org, x in names ? x : "") | 
-               <x, l, org> <- recon, org.path == input.path ];
+  mappings = for (<x, l, org> <- recon) {
+    if (org.path == input.path) {
+      append mapping(l, org, x in names ? x : "");
+    }
+    else {
+      append mapping(l);
+    } 
+  }
   return
     "var map = new sourceMap.SourceMapGenerator({file: \"<output.file>\"});
     '<for (m <- mappings) {>map.addMapping(<m>);
     '<}>
     'map.toString();";
 }
+
+str mapping(loc gen) 
+  = "{
+    '  generated: {
+    '    line: <gen.begin.line>,
+    '    column: <gen.begin.column>
+    '  }
+    '}";
 
 str mapping(loc gen, loc org, str name) 
   = "{
