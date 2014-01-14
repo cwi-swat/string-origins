@@ -24,6 +24,7 @@ import IO;
 import ValueIO;
 
 import stringorigins::escaping::Protect;
+import stringorigins::sourcemaps::SourceMaps;
 
 private str CONTROLLER_LANG = "Controller";
 private str CONTROLLER_EXT = "ctl";
@@ -81,7 +82,15 @@ void main() {
                writeFile((pt@\loc)[extension="string"], generated);
                writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
                
-               writeFile((pt@\loc)[extension="js"], compile2js(class, ctl));
+               jsloc = (pt@\loc)[extension="js"];
+               js = compile2js(class, ctl);
+               writeFile(jsloc, js);
+               
+               mg = string2sourceMap(js, [pt@\loc], jsloc);
+               println("Sourcemap = <mg>");
+               maploc = (pt@\loc)[extension="js.map"];
+               println(maploc);
+               writeFile(maploc, mg);
                return {};
     		 }),
     		 
