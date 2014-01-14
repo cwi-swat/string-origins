@@ -4,9 +4,11 @@ module lang::missgrant::base::Compile
 import lang::missgrant::base::AST;
 import stringorigins::escaping::Protect;
 
+str if_ = "if_";
+
 str compile(str name, Controller ctl) =
        "public class <name> {
-       '  private static String if_ = \"<name>\";
+       '  private static String <if_> = \"<name>\";
        '  public static void main(String args[]) throws java.io.IOException { 
        '     new <name>().run(new java.util.Scanner(System.in), 
        '                    new java.io.PrintWriter(System.out));
