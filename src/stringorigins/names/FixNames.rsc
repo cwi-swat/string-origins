@@ -9,7 +9,7 @@ alias Renaming = map[loc org, Rename rename];
 alias Rename = tuple[str old, str new];
 alias Renamed = map[loc from, loc new];
 alias Orgs = lrel[Maybe[loc], str];
-alias SourceMap = lrel[str substring, loc target, loc origin];
+alias SMap = lrel[str substring, loc target, loc origin];
 
 @doc{
 
@@ -61,7 +61,7 @@ str fixNames(str src, loc input, loc output, rel[str,loc](str, loc) extract,
 
 
 
-tuple[SourceMap,Renamed,Renaming] fixKeywords(SourceMap smap, loc input, set[str] keywords, str suf) {
+tuple[SMap,Renamed,Renaming] fixKeywords(SMap smap, loc input, set[str] keywords, str suf) {
   srcNames = { <x, l> | <x, l, org> <- smap, org.path == input.path }; 
   allNames = srcNames<0>;
 
@@ -71,7 +71,7 @@ tuple[SourceMap,Renamed,Renaming] fixKeywords(SourceMap smap, loc input, set[str
   return <smap, renamed, renaming>;
 }
 
-tuple[SourceMap,Renamed] unrenameNonNames(SourceMap smap, Renaming renaming, 
+tuple[SMap,Renamed] unrenameNonNames(SMap smap, Renaming renaming, 
                           rel[str, loc] names, loc output) {
   unrenaming = ( l: <renaming[l].new, renaming[l].old> | 
                    loc l <- renaming, 
@@ -89,7 +89,7 @@ Renaming makeRenaming(set[str] toRename, set[str] allNames, rel[str,loc] srcName
   return renaming;
 }
 
-SourceMap fixSemanticNames(SourceMap smap, rel[str,loc] names, loc input, loc output, str suf) {
+SMap fixSemanticNames(SMap smap, rel[str,loc] names, loc input, loc output, str suf) {
   srcNames = { <x, l> | <x, l, org> <- smap, 
                         <x, l> in names, org.path == input.path };
   
@@ -110,7 +110,7 @@ str fresh(str x, set[str] names, str suf) {
 }
 
 
-str yield(SourceMap smap) = ( "" | it + x | <x, _, _> <- smap );
+str yield(SMap smap) = ( "" | it + x | <x, _, _> <- smap );
 
 
 @doc{
@@ -148,7 +148,7 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
   return result;
 }
 
-tuple[SourceMap,Renamed] rename(SourceMap src, Renaming renaming) {
+tuple[SMap,Renamed] rename(SMap src, Renaming renaming) {
   shift = 0;
   renamed = ();
   src = for (<x, l, org> <- src) {
