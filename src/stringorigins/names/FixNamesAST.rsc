@@ -23,9 +23,9 @@ str fresh(str x, set[str] names) {
   
   <src, other> = partition(names, isSrc);
   foreign = other + keywords;
-  allNames = src + foreign;
   clashed = src & foreign;
   
+  allNames = src + foreign;
   map[str,str] renaming = ();
   str rename(str x) {
     if (x notin renaming) {
