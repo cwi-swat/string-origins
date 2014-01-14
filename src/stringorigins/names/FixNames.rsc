@@ -21,6 +21,9 @@ Assumptions:
 - the renaming of keywords will never overlap with synthesized names
   (e.g. don't use synthesized name "if_" and suffix "_" if "if" is an allowed 
   source name)
+- synthesized names should be individual chunks otherwise they won't
+  be recognized for keyword renaming [is this true? a source name
+  will be renamed again in the second phase]
 - note that this works even better on ASTs, because we then can *really* 
   distinguish source from generated names during keyword fixing (without
   having to approximate). 
