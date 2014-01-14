@@ -21,8 +21,9 @@ public class missgrantclash {
       switch (state) {
         
         case if__: {
+          // Handle if
           
-             unlockDoor(output);
+             token_(output);
           
              lockPanel(output);
           
@@ -35,6 +36,7 @@ public class missgrantclash {
         }
         
         case active: {
+          // Handle active
           
           
           if (if_(token)) {
@@ -49,6 +51,7 @@ public class missgrantclash {
         }
         
         case waitingForLight: {
+          // Handle waitingForLight
           
           
           if (run__(token)) {
@@ -59,6 +62,7 @@ public class missgrantclash {
         }
         
         case waitingForDrawer: {
+          // Handle waitingForDrawer
           
           
           if (if_(token)) {
@@ -73,8 +77,9 @@ public class missgrantclash {
         }
         
         case unlockedPanel: {
+          // Handle unlockedPanel
           
-             unlockPanel(output);
+             class_(output);
           
              lockDoor(output);
           
@@ -107,29 +112,37 @@ public class missgrantclash {
   }
   
   private boolean while_(String token) {
-    return token.equals("SHOULDBECOMEWHILE__");
+    return token.equals("BLA");
   }
   
   
-  private void unlockPanel(java.io.Writer output) throws java.io.IOException {
+  private void class_(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing class");
+    int class_var;
     output.write("PNUL\n");
     output.flush();
     // Add more code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockPanel");
+    int lockPanel_var;
     output.write("PNLK\n");
     output.flush();
     // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockDoor");
+    int lockDoor_var;
     output.write("D1LK\n");
     output.flush();
     // Add more code here
   }
   
-  private void unlockDoor(java.io.Writer output) throws java.io.IOException {
+  private void token_(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing token");
+    int token_var;
     output.write("D1UL\n");
     output.flush();
     // Add more code here

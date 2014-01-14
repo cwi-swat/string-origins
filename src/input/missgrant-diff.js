@@ -1,17 +1,17 @@
-missgrant = (function () {
-  var missgrant = {};
+missgrant-diff = (function () {
+  var missgrant-diff = {};
   
-  missgrant.state$idle = 0;
+  missgrant-diff.state$idle = 0;
   
-  missgrant.state$active = 1;
+  missgrant-diff.state$ACTIVE = 1;
   
-  missgrant.state$waitingForLight = 2;
+  missgrant-diff.state$waitingForLight = 2;
   
-  missgrant.state$waitingForDrawer = 3;
+  missgrant-diff.state$waitingForDrawer = 3;
   
-  missgrant.state$unlockedPanel = 4;
+  missgrant-diff.state$unlockedPanel = 4;
   
-  missgrant.run = function(input) {
+  missgrant-diff.run = function(input) {
     var state = this.state$idle;
     for (var i = 0; i < input.length; i++) {
       var token = input[i];
@@ -25,13 +25,17 @@ missgrant = (function () {
           
           
           if (this.doorClosed(token)) {
-             state = this.state$active;
+             state = this.state$ACTIVE;
+          }
+          
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
           }
           
           break;
         }
         
-        case this.state$active: {
+        case this.state$ACTIVE: {
           
           
           if (this.drawerOpened(token)) {
@@ -40,6 +44,10 @@ missgrant = (function () {
           
           if (this.lightOn(token)) {
              state = this.state$waitingForDrawer;
+          }
+          
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
           }
           
           break;
@@ -52,6 +60,10 @@ missgrant = (function () {
              state = this.state$unlockedPanel;
           }
           
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
+          }
+          
           break;
         }
         
@@ -60,6 +72,10 @@ missgrant = (function () {
           
           if (this.drawerOpened(token)) {
              state = this.state$unlockedPanel;
+          }
+          
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
           }
           
           break;
@@ -76,6 +92,10 @@ missgrant = (function () {
              state = this.state$idle;
           }
           
+          if (this.doorOpened(token)) {
+             state = this.state$idle;
+          }
+          
           break;
         }
         
@@ -83,44 +103,48 @@ missgrant = (function () {
     }
   };
   
-  missgrant.doorClosed = function(token) {
-    return token === "D1CL";
-  };
-  
-  missgrant.drawerOpened = function(token) {
+  missgrant-diff.drawerOpened = function(token) {
     return token === "D2OP";
   };
   
-  missgrant.lightOn = function(token) {
+  missgrant-diff.Bla = function(token) {
+    return token === "BLA";
+  };
+  
+  missgrant-diff.lightOn = function(token) {
     return token === "L1ON";
   };
   
-  missgrant.doorOpened = function(token) {
+  missgrant-diff.doorOpened = function(token) {
     return token === "D1OP";
   };
   
-  missgrant.panelClosed = function(token) {
+  missgrant-diff.panelClosed = function(token) {
     return token === "PNCL";
   };
   
+  missgrant-diff.newEvent = function(token) {
+    return token === "NEW";
+  };
   
-  missgrant.unlockPanel = function() {
+  
+  missgrant-diff.unlockPanel = function() {
     console.log("PNUL");
   };
   
-  missgrant.lockPanel = function() {
+  missgrant-diff.lockPanel = function() {
     console.log("PNLK");
   };
   
-  missgrant.lockDoor = function() {
+  missgrant-diff.lockDoor = function() {
     console.log("D1LK");
   };
   
-  missgrant.unlockDoor = function() {
+  missgrant-diff.unlockDoor = function() {
     console.log("D1UL");
   };
   
-  return missgrant;
+  return missgrant-diff;
 })();
 
-//# sourceMappingURL=missgrant.js.map
+//@ sourceMappingURL=missgrant-diff.js.map

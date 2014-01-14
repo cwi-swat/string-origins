@@ -65,5 +65,5 @@ data Mapping
   | mapping(loc generated, loc original, str name)
   ;
  
-@javaClass{stringorigins.sourcemaps.RunRhino}
+@javaClass{stringorigins.utils.EvalJS}
 java str evalJS(str x);
