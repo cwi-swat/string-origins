@@ -1,0 +1,110 @@
+diff {
+  source = /src/input/missgrant.ctl
+  target = /src/input/misterjones.ctl
+  syntax = lang::missgrant::base::Syntax
+  
+  delete Event 0 in (8,83,<2,1>,<6,17>)
+  delete Event 1 in (8,83,<2,1>,<6,17>)
+  delete Event 2 in (8,83,<2,1>,<6,17>)
+  delete Event 3 in (8,83,<2,1>,<6,17>)
+  delete Event 4 in (8,83,<2,1>,<6,17>)
+  insert Event [[candleStickTurned CSTR]](27,22,<3,1>,<3,23>) at 0 in (8,83,<2,1>,<6,17>)
+  insert Event [[bookTaken BKTK]](112,14,<7,1>,<7,15>) at 1 in (8,83,<2,1>,<6,17>)
+  insert Event [[fridgeOpened F1OP]](8,17,<2,1>,<2,18>) at 2 in (8,83,<2,1>,<6,17>)
+  insert Event [[fireOut FPOT]](98,12,<6,1>,<6,13>) at 3 in (8,83,<2,1>,<6,17>)
+  insert Event [[gateClosed GTCL]](162,15,<10,1>,<10,16>) at 4 in (8,83,<2,1>,<6,17>)
+  insert Event [[bookPlaced BKPL]](128,15,<8,1>,<8,16>) at 5 in (8,83,<2,1>,<6,17>)
+  insert Event [[fireplaceLit FPLT]](79,17,<5,1>,<5,18>) at 6 in (8,83,<2,1>,<6,17>)
+  insert Event [[candleStickTurnedBack CSTB]](51,26,<4,1>,<4,27>) at 7 in (8,83,<2,1>,<6,17>)
+  insert Event [[gateOpened GTOP]](145,15,<9,1>,<9,16>) at 8 in (8,83,<2,1>,<6,17>)
+  delete Id 0 in (112,10,<10,1>,<10,11>)
+  insert Id [[gateOpened]](199,10,<15,1>,<15,11>) at 0 in (112,10,<10,1>,<10,11>)
+  insert Id [[candleStickTurnedBack]](211,21,<16,1>,<16,22>) at 1 in (112,10,<10,1>,<10,11>)
+  insert Id [[bookPlaced]](234,10,<17,1>,<17,11>) at 2 in (112,10,<10,1>,<10,11>)
+  insert Id [[fireOut]](246,7,<18,1>,<18,8>) at 3 in (112,10,<10,1>,<10,11>)
+  delete Command 0 in (139,64,<14,1>,<17,16>)
+  delete Command 1 in (139,64,<14,1>,<17,16>)
+  delete Command 2 in (139,64,<14,1>,<17,16>)
+  delete Command 3 in (139,64,<14,1>,<17,16>)
+  insert Command [[turnBackCandleStick TBCS]](365,24,<27,1>,<27,25>) at 0 in (139,64,<14,1>,<17,16>)
+  insert Command [[unlockGate GTUK]](306,15,<24,1>,<24,16>) at 1 in (139,64,<14,1>,<17,16>)
+  insert Command [[turnBackBookCase TBBC]](342,21,<26,1>,<26,22>) at 2 in (139,64,<14,1>,<17,16>)
+  insert Command [[turnBookCase TRBC]](323,17,<25,1>,<25,18>) at 3 in (139,64,<14,1>,<17,16>)
+  insert Command [[lockGate GTLK]](291,13,<23,1>,<23,14>) at 4 in (139,64,<14,1>,<17,16>)
+  insert Command [[activateTurrets ACTU]](269,20,<22,1>,<22,21>) at 5 in (139,64,<14,1>,<17,16>)
+  delete Id 0 in (232,20,<21,10>,<21,30>)
+  delete Id 1 in (232,20,<21,10>,<21,30>)
+  insert Id [[unlockGate]](419,10,<31,10>,<31,20>) at 0 in (232,20,<21,10>,<21,30>)
+  insert Id [[turnBackBookCase]](430,16,<31,21>,<31,37>) at 1 in (232,20,<21,10>,<21,30>)
+  insert Id [[turnBackCandleStick]](447,19,<31,38>,<31,57>) at 2 in (232,20,<21,10>,<21,30>)
+  delete Transition 0 in (255,20,<22,1>,<22,21>)
+  insert Transition [[gateClosed => waitingForRest]](469,28,<32,1>,<32,29>) at 0 in (255,20,<22,1>,<22,21>)
+  replace Actions (297,0,<27,1>,<27,1>) with [[actions {turnBookCase}]](1868,22,<111,1>,<111,23>)
+  delete Transition 0 in (297,60,<27,1>,<28,28>)
+  delete Transition 1 in (297,60,<27,1>,<28,28>)
+  insert Transition [[bookTaken => active]](1892,19,<112,1>,<112,20>) at 0 in (297,60,<27,1>,<28,28>)
+  delete State 2 in (211,352,<20,0>,<45,3>)
+  delete State 3 in (211,352,<20,0>,<45,3>)
+  delete State 4 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitBook
+   actions {lockGate activateTurrets}
+   bookTaken => active
+  end]](1528,75,<90,0>,<93,3>) at 2 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFire
+   actions {lockGate activateTurrets}
+   fireplaceLit => active
+  end]](1605,78,<95,0>,<98,3>) at 3 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitCandleBook
+   candleStickTurned => waitBook 
+   bookTaken => waitCandle
+  end]](1105,81,<64,0>,<67,3>) at 4 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridge
+   actions {lockGate activateTurrets}
+   fridgeOpened => active
+  end]](1772,80,<105,0>,<108,3>) at 5 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridgeFireBook
+   fridgeOpened => waitFireBook 
+   fireplaceLit => waitFridgeBook
+   bookTaken => waitFridgeFire
+  end]](773,120,<47,0>,<51,3>) at 6 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitCandleFire
+   candleStickTurned => waitFire 
+   fireplaceLit => waitCandle 
+  end]](1351,85,<80,0>,<83,3>) at 7 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridgeCandle
+   fridgeOpened => waitCandle
+   candleStickTurned => waitFridge
+  end]](1439,87,<85,0>,<88,3>) at 8 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFireBook
+   fireplaceLit => waitBook 
+   bookTaken => waitFire
+  end]](1030,72,<59,0>,<62,3>) at 9 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridgeBook
+   fridgeOpened => waitBook 
+   bookTaken => waitFridge
+  end]](1189,76,<69,0>,<72,3>) at 10 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitCandle
+   actions {lockGate activateTurrets}
+   candleStickTurned => active
+  end]](1685,85,<100,0>,<103,3>) at 11 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitCandleFireBook
+   candleStickTurned => waitFireBook
+   fireplaceLit => waitCandleBook
+   bookTaken => waitCandleFire
+  end]](646,124,<41,0>,<45,3>) at 12 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridgeFire
+   fireplaceLit => waitFridge 
+   fridgeOpened => waitFire
+  end]](1269,79,<75,0>,<78,3>) at 13 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitFridgeCandleBook
+   candleStickTurned => waitFridgeBook
+   bookTaken => waitFridgeCandle
+   fridgeOpened => waitCandleBook 
+  end]](896,131,<53,0>,<57,3>) at 14 in (211,352,<20,0>,<45,3>)
+  insert State [[state waitingForRest
+   fridgeOpened => waitCandleFireBook 
+   candleStickTurned => waitFridgeFireBook
+   fireplaceLit => waitFridgeCandleBook
+  end]](504,140,<35,0>,<39,3>) at 15 in (211,352,<20,0>,<45,3>)
+}
+  

@@ -1,86 +1,92 @@
 public class missgrantclash {
+  private static String if_ = "missgrantclash";
   public static void main(String args[]) throws java.io.IOException { 
      new missgrantclash().run(new java.util.Scanner(System.in), 
                     new java.io.PrintWriter(System.out));
   }
   
-  private static final int state$if = 0;
+  private static final int if = 0;
   
-  private static final int state$active = 1;
+  private static final int active = 1;
   
-  private static final int state$waitingForLight = 2;
+  private static final int waitingForLight = 2;
   
-  private static final int state$waitingForDrawer = 3;
+  private static final int waitingForDrawer = 3;
   
-  private static final int state$unlockedPanel = 4;
+  private static final int unlockedPanel = 4;
   
   void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-    int state = state$if;
+    int state = if;
     while (true) {
       String token = input.nextLine();
       switch (state) {
         
-        case state$if: {
+        case if: {
+          // Handle if
           
-             unlockDoor(output);
+             token(output);
           
              lockPanel(output);
           
           
           if (run_(token)) {
-             state = state$active;
+             state = active;
           }
           
           break;
         }
         
-        case state$active: {
+        case active: {
+          // Handle active
           
           
           if (if_(token)) {
-             state = state$waitingForLight;
+             state = waitingForLight;
           }
           
           if (run(token)) {
-             state = state$waitingForDrawer;
+             state = waitingForDrawer;
           }
           
           break;
         }
         
-        case state$waitingForLight: {
+        case waitingForLight: {
+          // Handle waitingForLight
           
           
           if (run(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           break;
         }
         
-        case state$waitingForDrawer: {
+        case waitingForDrawer: {
+          // Handle waitingForDrawer
           
           
           if (if_(token)) {
-             state = state$unlockedPanel;
+             state = unlockedPanel;
           }
           
           if (while(token)) {
-             state = state$waitingForLight;
+             state = waitingForLight;
           }
           
           break;
         }
         
-        case state$unlockedPanel: {
+        case unlockedPanel: {
+          // Handle unlockedPanel
           
-             unlockPanel(output);
+             class(output);
           
              lockDoor(output);
           
           
           if (while_(token)) {
-             state = state$if;
+             state = if;
           }
           
           break;
@@ -107,29 +113,37 @@ public class missgrantclash {
   }
   
   private boolean while_(String token) {
-    return token.equals("SHOULDBECOMEWHILE__");
+    return token.equals("BLA");
   }
   
   
-  private void unlockPanel(java.io.Writer output) throws java.io.IOException {
+  private void class(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing class");
+    int class_var;
     output.write("PNUL\n");
     output.flush();
     // Add more code here
   }
   
   private void lockPanel(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockPanel");
+    int lockPanel_var;
     output.write("PNLK\n");
     output.flush();
     // Add more code here
   }
   
   private void lockDoor(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing lockDoor");
+    int lockDoor_var;
     output.write("D1LK\n");
     output.flush();
     // Add more code here
   }
   
-  private void unlockDoor(java.io.Writer output) throws java.io.IOException {
+  private void token(java.io.Writer output) throws java.io.IOException {
+    System.err.println("Executing token");
+    int token_var;
     output.write("D1UL\n");
     output.flush();
     // Add more code here

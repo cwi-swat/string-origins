@@ -1,5 +1,3 @@
-// a comment
-
 events
  run_ D1CL
  if_ D2OP
@@ -7,7 +5,6 @@ events
  while D1OP
  while_ BLA
 end 
-
 
 resetEvents 
 end 

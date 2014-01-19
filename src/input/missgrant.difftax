@@ -1,0 +1,17 @@
+diff {
+  source = /src/input/missgrant.ctl
+  target = /src/input/missgrant-diff.ctl
+  syntax = lang::missgrant::base::Syntax
+  
+  delete Event 0 in (8,83,<2,1>,<6,17>)
+  replace Id (58,10,<5,1>,<5,11>) with [[doorOpenedRenamed]](53,17,<6,1>,<6,18>)
+  insert Event [[newEvent NEW]](95,12,<8,1>,<8,13>) at 4 in (8,83,<2,1>,<6,17>)
+  insert Event [[Bla BLA]](30,7,<4,1>,<4,8>) at 5 in (8,83,<2,1>,<6,17>)
+  insert Command [[COM COMMAND]](221,11,<20,1>,<20,12>) at 4 in (139,64,<14,1>,<17,16>)
+  replace Id (269,6,<22,15>,<22,21>) with [[ACTIVE]](298,6,<25,15>,<25,21>)
+  replace Id (289,6,<26,6>,<26,12>) with [[ACTIVE]](318,6,<29,6>,<29,12>)
+  replace Actions (448,0,<38,1>,<38,1>) with [[actions {bla}]](580,13,<48,1>,<48,14>)
+  insert State [[state someLoneState
+  end]](452,23,<39,0>,<40,3>) at 5 in (211,352,<20,0>,<45,3>)
+}
+  

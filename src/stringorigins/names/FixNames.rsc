@@ -4,6 +4,7 @@ import String;
 import util::Maybe;
 import List;
 import IO;
+import Exception;
 
 alias Renaming = map[loc org, Rename rename];
 alias Rename = tuple[str old, str new];
@@ -138,7 +139,7 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
       append <sub, cur, l>;
     }
     else {
-      throw "No origin: \'<sub>\'";
+      throw AssertionFailed("No origin: \'<sub>\'");
     }
     cur.offset += size(sub);
     cur.begin.column = cur.end.column;

@@ -2,6 +2,11 @@ module lang::missgrant::base::Compile2JS
 
 import lang::missgrant::base::AST;
 import stringorigins::escaping::Protect;
+import stringorigins::sourcemaps::SourceMaps;
+
+
+str ctlSourceMap(str compiled, loc input, loc output, set[str] names)
+  = generateSourceMap(compiled, input, output, names = names);
 
 str compile2js(str name, Controller ctl) =
        "<name> = (function () {
