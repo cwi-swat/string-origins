@@ -41,3 +41,30 @@ str fresh(str x, set[str] names) {
       when x in clashed, isSrc(x)
   }
 }
+
+str fix(str s, map[loc, str] ns, set[str] kws, loc input) {
+  bool isSrc(str x) = 
+    origin(x).path == input.path;
+  
+  <src, other> = partition(ns, isSrc);
+  notSrc = other<1> + kws;
+  
+  bool toFix(str x) = 
+    x in src<1> && x in notSrc; 
+    
+  return subst(s, renaming(src, ns, src<1> + notSrc, toFix));
+}
+
+map[loc, str] renaming(map[loc, str] ns, set[str] allNs, bool(str) pred) {
+  void rename(map[loc, str] ren, loc l, str x) {
+    if (l notin ren) {
+      y = fresh(x, allNs);
+      ren[l] = y;
+      allNs += y;
+    }
+    return ren;
+  } 
+  return ( () | rename(it, l, ns[l]) | l <- ns, pred(ns[l]) );
+}
+
+

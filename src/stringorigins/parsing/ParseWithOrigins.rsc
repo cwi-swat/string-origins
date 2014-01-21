@@ -12,7 +12,7 @@ Tree orgParse(lrel[Maybe[loc], str] orgs, loc src) {
   Tree toTree(str x, loc l) {
     if (l.scheme != "rascal") { 
       // input substring
-      return toTree(x, {\tag("category"("MetaKeyword"))});
+      return toTree(x, {\tag("category"("MetaAmbiguity"))});
     }
     return toTree(x);
   }

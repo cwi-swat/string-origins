@@ -5,6 +5,5 @@ import util::Maybe;
 
 alias ID = loc;
 
-ID getID(str x) = l
-  when  loc l <- originsOnly(x);
+ID getID(str x) = l when  loc l <- originsOnly(x);
 
