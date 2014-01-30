@@ -2,9 +2,9 @@ module stringorigins::sourcemaps::SourceMaps
 
 import String;
 import util::Maybe;
-import stringorigins::names::FixNames; // for reconstruct
 import util::ShellExec;
 import IO;
+import stringorigins::utils::Origins; 
 
 str generateSourceMap(str js, loc input, loc output, set[str] names = {})
   = evalJS(string2sourceMapGenerator(js, input, output, names));

@@ -5,12 +5,11 @@ import util::Maybe;
 import List;
 import IO;
 import Exception;
+import stringorigins::utils::Origins;
 
 alias Renaming = map[loc org, Rename rename];
 alias Rename = tuple[str old, str new];
 alias Renamed = map[loc from, loc new];
-alias Orgs = lrel[Maybe[loc], str];
-alias SMap = lrel[str substring, loc target, loc origin];
 
 @doc{
 
@@ -108,45 +107,6 @@ str fresh(str x, set[str] names, str suf) {
   while (x in names) 
     x = suffix(x, suf);
   return x;
-}
-
-
-str yield(SMap smap) = ( "" | it + x | <x, _, _> <- smap );
-
-
-@doc{
-
-An lrel coming from origins()) maps (source or meta program) origins to 
-output string fragments. This functions reconstructs the source locations
-of each chunk according to occurence in the output. 
-}
-// str, loc (src loc), loc (origin)
-lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
-  cur = |<src.scheme>://<src.authority><src.path>|(0, 0, <1, 0>, <1,0>);
- 
-  result = for (<org, str sub> <- orgs) {
-    cur.length = size(sub);
-    nls = size(findAll(sub, "\n"));
-    cur.end.line += nls;
-    if (nls != 0) {
-      // reset
-      cur.end.column = size(sub) - findLast(sub, "\n") - 1;
-    }
-    else {
-      cur.end.column += size(sub);
-    }
-    if (just(loc l) := org) {
-      append <sub, cur, l>;
-    }
-    else {
-      throw AssertionFailed("No origin: \'<sub>\'");
-    }
-    cur.offset += size(sub);
-    cur.begin.column = cur.end.column;
-    cur.begin.line = cur.end.line;
-  }
-  
-  return result;
 }
 
 tuple[SMap,Renamed] rename(SMap src, Renaming renaming) {

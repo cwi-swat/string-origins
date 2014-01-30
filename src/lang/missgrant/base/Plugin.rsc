@@ -23,7 +23,7 @@ import String;
 import IO;
 import ValueIO;
 
-import stringorigins::escaping::Protect;
+import stringorigins::regions::Regions;
 import stringorigins::sourcemaps::SourceMaps;
 
 private str CONTROLLER_LANG = "Controller";
@@ -68,18 +68,18 @@ void main() {
     		   out = (pt@\loc)[extension="javax"];
     		   regions = (pt@\loc)[extension="regions"];
     		   class = split(".", out.file)[0];
-    		   generated = compile(class, ctl);
-    		   if (exists(regions)){
-    		     theRegions = readTextValueFile(#lrel[int, int, str, str], regions);
-    		     generated = plugRegions(theRegions, origins(generated));
+    		   generated = compile(setOrigins(class, [pt@\loc]), ctl);
+    		   javaLoc = (pt@\loc)[extension="java"];
+               if (exists(regions)){
+    		     theRegions = readTextValueFile(#Regions, regions);
+    		     generated = plug(generated, theRegions, javaLoc);
     		   }
-    		   theOrigins = origins(generated); // NB: origins after plugging
-    		   newRegions = calculateRegions(theOrigins);
+    		   newRegions = extract(generated, javaLoc);
     		   writeTextValueFile(regions, newRegions);
     		   writeFile(out, generated);
-    		   writeFile((pt@\loc)[extension="java"], generated);
+    		   writeFile(javaLoc, generated);
                writeFile((pt@\loc)[extension="string"], generated);
-               writeBinaryValueFile((pt@\loc)[extension="origins"], theOrigins);
+               writeBinaryValueFile((pt@\loc)[extension="origins"], origins(generated));
                
                jsloc = (pt@\loc)[extension="js"];
                js = compile2js(setOrigins(class, [pt@\loc]), ctl);

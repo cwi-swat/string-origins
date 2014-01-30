@@ -12,7 +12,7 @@ import List;
 import IO;
 import ValueIO;
 
-import stringorigins::escaping::Protect;
+import stringorigins::regions::Regions;
 
 
 private str JAVAX_LANG = "Javax";

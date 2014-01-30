@@ -18,3 +18,14 @@ NameGraph relateStates(Controller ctl, map[str,ID] stateDefs) {
 
 NameGraph resolveNames(Controller ctl) =
   relateStates(ctl, collectStates(ctl));
+  
+loc origin(str x) = getID(x);
+
+alias G = rel[loc use, loc def];
+
+G resolve(Controller ctl) {  
+  sd = ( x: origin(x) | /state(x, _, _) := ctl );
+  ed = ( x: origin(x) | /event(x, _) := ctl);
+  return { <origin(e), ed[e]>, <origin(s), sd[s]> 
+              | /transition(e, s) := ctl };
+}

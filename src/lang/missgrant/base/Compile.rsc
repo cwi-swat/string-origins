@@ -2,7 +2,7 @@
 module lang::missgrant::base::Compile
 
 import lang::missgrant::base::AST;
-import stringorigins::escaping::Protect;
+import stringorigins::regions::Regions;
 
 str if_ = "if_";
 
@@ -36,7 +36,7 @@ str command2java(Command command) =
          '  int <command.name>_var;
          '  output.write(\"<command.token>\\n\");
          '  output.flush();
-         '  <protected("// Add more code here", command.name)>
+         '  <regionize("// Add more code here", command.name)>
          '}";
 
 str event2java(Event event) =
