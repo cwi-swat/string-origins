@@ -14,7 +14,6 @@ import ValueIO;
 
 import stringorigins::regions::Regions;
 
-
 private str JAVAX_LANG = "Javax";
 private str JAVAX_EXT = "javax";
 
@@ -24,11 +23,10 @@ void javaMain() {
      originsLoc = l[extension="origins"];
      pt = parse(#start[CompilationUnit], src, l);
      lrel[Maybe[loc],str] theOrigins = [];
-     list[Region] theRegions = [];
-   	 if (exists(regionsLoc)){
-   	 	theRegions = readTextValueFile(#lrel[int,int,str,str], regionsLoc);
+     if (exists(regionsLoc)){
+   	 	Regions theRegions = readTextValueFile(#Regions, regionsLoc);
+   	 	pt = pt[@regions = theRegions];
    	 }
-   	 pt = pt[@regions = theRegions];
    	 return pt; 	
   });
 

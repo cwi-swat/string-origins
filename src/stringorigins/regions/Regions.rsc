@@ -5,14 +5,13 @@ import stringorigins::utils::Origins;
 
 import ParseTree;
 
+//alias Regions = map[str key,tuple[str txt, loc pos] contents];
+//alias Regions = lrel[int from, int to, str key, str val];
+public alias Regions = map[str key,tuple[str txt, loc pos] contents];
+
 anno Regions Tree@regions;
 
-//alias Regions = map[str key,tuple[str txt, loc pos] contents];
-alias Regions = lrel[int from, int to, str key, str val];
-
-
 str regionize(str s, str key) = tagString(s, "region", key);
-
 
 bool isRegion(str x) = /region/ := origin(x).query;
 
@@ -21,12 +20,11 @@ str getName(str x) = n
 
 Regions extract(str x, loc output) = extract(decons(x, output));
 
-Regions extract(map[loc, str] m) = 
-  ( getName(m[l]): <m[l], l> | l <- m, isRegion(m[l]) ); 
+Regions extract(map[loc, str] m) = ( getName(m[l]): <m[l], l> | l <- m, isRegion(m[l]) ); 
 
 str plug(str src, Regions rs, loc output) {
   m = decons(src, output);
-  r = ( l: setOrigins(regions[k].txt, l) | l <- m, isRegion(m[l]),
+  r = ( l: setOrigins(rs[k].txt, [l]) | l <- m, isRegion(m[l]),
            k := getName(m[l]), k in rs );
   return subst(src, r);
 }

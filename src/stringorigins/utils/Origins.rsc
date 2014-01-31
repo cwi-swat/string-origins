@@ -70,7 +70,8 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
       cur.end.column += size(sub);
     }
     if (just(loc l) := org) {
-      append <sub, cur, l>;
+      // IMPORTANT: Propagate the query string
+      append <sub, cur[query=l.query], l>;
     }
     else {
       throw AssertionFailed("No origin: \'<sub>\'");
