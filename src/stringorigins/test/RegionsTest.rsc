@@ -1,4 +1,4 @@
-module stringorigins::\test::RegionsTest
+	module stringorigins::\test::RegionsTest
 
 import stringorigins::regions::Regions;
 import IO;
@@ -15,7 +15,7 @@ str T(str input) = "VCARD:4.0
 
 public test bool test1(){
 	str output = T(input);
-	loc exLoc = |project://string-origins/src/stringorigins/regions/test1.vcard|;
+	loc exLoc = |project://string-origins/src/stringorigins/test/test1.vcard|;
 	writeFile(exLoc, output);
 	Regions rs = extract(output, exLoc);
 	iprintln(rs);
@@ -29,7 +29,7 @@ str input2 = "Pablo Inostroza Valdera
 public test bool test2(){
 	str output1 = T(input);
 	str output2 = T(input2);
-	loc exLoc = |project://string-origins/src/stringorigins/regions/test2.vcard|;
+	loc exLoc = |project://string-origins/src/stringorigins/test/test2.vcard|;
 	writeFile(exLoc, output2);
 	Regions rs = extract(output2, exLoc);
 	generated = plug(output2, rs, exLoc);
