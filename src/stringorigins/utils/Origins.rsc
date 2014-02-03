@@ -71,7 +71,12 @@ lrel[str, loc, loc] reconstruct(lrel[Maybe[loc], str] orgs, loc src) {
     }
     if (just(loc l) := org) {
       // IMPORTANT: Propagate the query string
-      append <sub, cur[query=l.query], l>;
+      if (l.query != "") {
+        append <sub, cur[query=l.query], l>;
+      }
+      else {
+        append <sub, cur, l>;
+      }
     }
     else {
       throw AssertionFailed("No origin: \'<sub>\'");
