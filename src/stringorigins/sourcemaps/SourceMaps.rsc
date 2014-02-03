@@ -9,6 +9,7 @@ import stringorigins::utils::Origins;
 str generateSourceMap(str js, loc input, loc output, set[str] names = {})
   = evalJS(string2sourceMapGenerator(js, input, output, names));
 
+<<<<<<< Updated upstream
 str string2sourceMapGenerator(str src, loc input, loc output, set[str] names) {
   recon = reconstruct(origins(src), output);
   mappings = for (<x, l, org> <- recon) {
@@ -24,6 +25,27 @@ str string2sourceMapGenerator(str src, loc input, loc output, set[str] names) {
     '<for (m <- mappings) {>map.addMapping(<m>);
     '<}>
     'map.toString();";
+=======
+void mapGen() {
+  loc srcmap = |project://string-origins/src/input/missgrant.js.map|;
+  loc input = |project://string-origins/src/input/missgrant.ctl|;
+  loc output = |project://string-origins/src/input/missgrant.js|;
+
+  ast = load(input);
+  js = compile2js("missgrant", ast);
+  mg = string2sourceMap(js, input, output);
+  println(mg);
+  writeFile(output, js);
+  writeFile(srcmap, mg);
+}
+
+str string2sourceMap(str src, loc input, loc output, set[str] names = {}) {
+  recon = reconstruct(origins(src), output);
+  mappings = [ x in names ? mapping(l, org,  x) : mapping(l, org) | 
+               <x, l, org> <- recon, bprintln("x = <x>, l = <l>, org = <org>"), org.path == input.path ];
+  iprintln(mappings);
+  return generateSourceMap(sourceMap(output.file, mappings));
+>>>>>>> Stashed changes
 }
 
 str mapping(loc gen) 
