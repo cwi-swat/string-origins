@@ -47,16 +47,18 @@ str event2java(Event event) =
 
 str controller2run(Controller ctl) =
          "void run(java.util.Scanner input, java.io.Writer output) throws java.io.IOException {
-         '  int state = <stateName(ctl.states[0])>;
+         '  int <current()> = <stateName(ctl.states[0])>;
          '  while (true) {
          '    String token = input.nextLine();
-         '    switch (state) {
+         '    switch (<current()>) {
          '      <for (s <- ctl.states) {>
          '      <state2case(s)>
          '      <}>
          '    }
          '  }
          '}";
+         
+str current() = "current";
 
 str state2case(State s) =
          "case <stateName(s)>: {
@@ -66,7 +68,7 @@ str state2case(State s) =
          '  <}>
          '  <for (transition(e, s2) <- s.transitions) {>
          '  if (<e>(token)) {
-         '     state = <stateName(s2)>;
+         '     <current()> = <stateName(s2)>;
          '  }
          '  <}>
          '  break;

@@ -11,12 +11,12 @@ public alias Regions = map[str key,tuple[str txt, loc pos] contents];
 
 anno Regions Tree@regions;
 
-str regionize(str s, str key) = tagString(s, "region", key);
+str regionize(str s, str key) = tagString(s, "editable", key);
 
-bool isRegion(str x) = /region/ := origin(x).query;
+bool isRegion(str x) = /editable/ := origin(x).query;
 
 str getName(str x) = n
-  when /region=<n:.*>/ := origin(x).query;
+  when /editable=<n:.*>/ := origin(x).query;
 
 Regions extract(str x, loc output) = extract(decons(x, output));
 
