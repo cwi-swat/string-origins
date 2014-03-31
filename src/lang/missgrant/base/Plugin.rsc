@@ -23,7 +23,7 @@ import String;
 import IO;
 import ValueIO;
 
-import stringorigins::regions::Regions;
+import stringorigins::icmt2014::Core;
 import stringorigins::sourcemaps::SourceMaps;
 
 private str CONTROLLER_LANG = "Controller";

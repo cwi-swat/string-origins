@@ -36,7 +36,7 @@ str command2java(Command command) =
          '  int <command.name>_var;
          '  output.write(\"<command.token>\\n\");
          '  output.flush();
-         '  <regionize("// Add more code here", command.name)>
+         '  <tagString("// Add more code here", "editable", command.name)>
          '}";
 
 str event2java(Event event) =

@@ -12,7 +12,9 @@ import List;
 import IO;
 import ValueIO;
 
-import stringorigins::regions::Regions;
+import stringorigins::icmt2014::Core;
+
+anno Regions Tree@regions;
 
 private str JAVAX_LANG = "Javax";
 private str JAVAX_EXT = "javax";
