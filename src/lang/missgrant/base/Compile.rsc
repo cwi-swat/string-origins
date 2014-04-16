@@ -2,7 +2,7 @@
 module lang::missgrant::base::Compile
 
 import lang::missgrant::base::AST;
-import stringorigins::regions::Regions;
+import String;
 
 str if_ = "if_";
 

@@ -3,6 +3,7 @@ module stringorigins::icmt2014::Core
 import String;
 import List;
 import IO;
+import Map;
 
 loc origin(str x) = pos
 	when <just(pos), _> := origins(x)[0];
@@ -60,7 +61,19 @@ Regions extract(str s, loc output) = (l : getTagValue(x, "editable") | <l,x> <-m
 
 alias Contents = map[str name, str contents];
 
-str plug(str s, loc l, Contents c) = substitute(s, extract(s, l) o c); 
+str buildString(str x, str name, map[str,loc] rs)
+	= setOrigins(x, [rs[name]]);
+
+Contents setOriginsForContents(Contents cs, Regions rs) =
+	(name : buildString(x, name, inverted) | name <- cs, x := cs[name])
+	when inverted := invertUnique(rs);
+
+Contents extractContents(str s, loc output, Regions rs) = 
+	setOriginsForContents(cs, rs)
+	when m := index(s, output),
+		 cs := (name : x | <l,x> <-m, isTagged(x, "editable"), name := getTagValue(x, "editable"));
+
+str plug(str s, loc l, Contents c) = substitute(s, extract(s, l) o c);
 
 alias Ref = tuple[set[loc] names, rel[loc use, loc def] refs];
 
@@ -72,7 +85,7 @@ str substitute(str src, map[loc,str] s) {
    		shift += delta;
    		return src; 
  	}
-	order = sort([ k | k <- s ], bool(loc a, loc b) { return a.offset < b.offset; });
+ 	order = sort([ k | k <- s ], bool(loc a, loc b) { return a.offset < b.offset; });
 	return ( src | subst1(it, x, s[x]) | x <- order );
 }
 

@@ -15,6 +15,7 @@ import ValueIO;
 import stringorigins::icmt2014::Core;
 
 anno Regions Tree@regions;
+anno Contents Tree@contents;
 
 private str JAVAX_LANG = "Javax";
 private str JAVAX_EXT = "javax";
@@ -22,7 +23,6 @@ private str JAVAX_EXT = "javax";
 void javaMain() {
   registerLanguage(JAVAX_LANG, JAVAX_EXT, Tree(str src, loc l) {
      regionsLoc = l[extension="regions"];
-     originsLoc = l[extension="origins"];
      pt = parse(#start[CompilationUnit], src, l);
      lrel[Maybe[loc],str] theOrigins = [];
      if (exists(regionsLoc)){
@@ -35,8 +35,11 @@ void javaMain() {
   contribs = {
 		     builder(set[Message] (Tree pt) {
 		       regionsLoc = (pt@\loc)[extension="regions"];
+		       contentsLoc = (pt@\loc)[extension="contents"];
     		   regions = pt@regions;
+    		   contents = pt@contents;
     		   writeTextValueFile(regionsLoc, regions);
+    		   writeTextValueFile(contentsLoc, contents);
     		   return {};
     		 })
   };

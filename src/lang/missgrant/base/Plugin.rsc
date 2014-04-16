@@ -67,26 +67,31 @@ void main() {
     		   ctl = desugar([resetEvents(), retries()], implode(pt));
     		   javaLoc = (pt@\loc)[extension="javax"];
     		   regions = (pt@\loc)[extension="regions"];
+    		   contents = (pt@\loc)[extension="contents"];
     		   class = split(".", javaLoc.file)[0];
     		   generated = compile(setOrigins(class, [pt@\loc]), ctl);
     		   if (exists(regions)){
     		     theRegions = readTextValueFile(#Regions, regions);
-    		     generated = plug(generated, theRegions, javaLoc);
+    		     theContents = readTextValueFile(#Contents, contents);
+    		     theContentsWithOrgs = setOriginsForContents(theContents, theRegions);
+    		     generated = plug(generated, javaLoc, theContentsWithOrgs);
     		   }
     		   newRegions = extract(generated, javaLoc);
+    		   newContents = extractContents(generated, javaLoc, newRegions);
     		   writeTextValueFile(regions, newRegions);
+    		   writeTextValueFile(contents, newContents);
     		   writeFile(javaLoc, generated);
     		   writeFile((pt@\loc)[extension="string"], generated);
-       writeBinaryValueFile((pt@\loc)[extension="origins"], origins(generated));
+       		   writeBinaryValueFile((pt@\loc)[extension="origins"], origins(generated));
                
-       jsloc = (pt@\loc)[extension="js"];
-       js = compile2js(setOrigins(class, [pt@\loc]), ctl);
-       writeFile(jsloc, js);
+       		   jsloc = (pt@\loc)[extension="js"];
+       		   js = compile2js(setOrigins(class, [pt@\loc]), ctl);
+       		   writeFile(jsloc, js);
                
-       mg = ctlSourceMap(js, pt@\loc, jsloc, { x | /str x := ctl });
-       maploc = (pt@\loc)[extension="js.map"];
-       writeFile(maploc, mg);
-       return {};
+       		   mg = ctlSourceMap(js, pt@\loc, jsloc, { x | /str x := ctl });
+       		   maploc = (pt@\loc)[extension="js.map"];
+       		   writeFile(maploc, mg);
+       		   return {};
     		 }),
     		 
     		 outliner(node (Tree input) {

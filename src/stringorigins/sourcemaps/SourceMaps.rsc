@@ -9,7 +9,6 @@ import stringorigins::utils::Origins;
 str generateSourceMap(str js, loc input, loc output, set[str] names = {})
   = evalJS(string2sourceMapGenerator(js, input, output, names));
 
-<<<<<<< Updated upstream
 str string2sourceMapGenerator(str src, loc input, loc output, set[str] names) {
   recon = reconstruct(origins(src), output);
   mappings = for (<x, l, org> <- recon) {
@@ -25,7 +24,8 @@ str string2sourceMapGenerator(str src, loc input, loc output, set[str] names) {
     '<for (m <- mappings) {>map.addMapping(<m>);
     '<}>
     'map.toString();";
-=======
+}
+
 void mapGen() {
   loc srcmap = |project://string-origins/src/input/missgrant.js.map|;
   loc input = |project://string-origins/src/input/missgrant.ctl|;
@@ -45,7 +45,6 @@ str string2sourceMap(str src, loc input, loc output, set[str] names = {}) {
                <x, l, org> <- recon, bprintln("x = <x>, l = <l>, org = <org>"), org.path == input.path ];
   iprintln(mappings);
   return generateSourceMap(sourceMap(output.file, mappings));
->>>>>>> Stashed changes
 }
 
 str mapping(loc gen) 
